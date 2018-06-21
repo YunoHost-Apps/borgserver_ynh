@@ -39,7 +39,7 @@ pip3 install borgbackup
 #=================================================
 # CREATE SSH USER USED BY BORG
 #=================================================
-adduser $ssh_user -s /bin/bash --disabled-password
+adduser $ssh_user --quiet --gecos ",,," --shell /bin/bash --disabled-password
 
 #=================================================
 # AUTORIZE SSH FOR THIS USER

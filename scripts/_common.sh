@@ -20,7 +20,7 @@ ynh_export () {
             ynh_arg="PATH"
         fi
         ynh_arg="YNH_APP_ARG_$ynh_arg"
-        export $var=${!ynh_arg}
+        export $var="${!ynh_arg}"
     done
 }
 # Save listed var in YunoHost app settings 
@@ -55,6 +55,6 @@ ynh_render_template() {
 
 ynh_configure () {
     ynh_backup_if_checksum_is_different $2
-    ynh_configure "${PKG_DIR}/conf/$1.j2" $2
+    ynh_render_template "${PKG_DIR}/conf/$1.j2" $2
     ynh_store_file_checksum $2
 }
