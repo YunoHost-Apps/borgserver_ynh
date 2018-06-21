@@ -29,6 +29,7 @@ app=$YNH_APP_INSTANCE_NAME
 
 export ssh_user=$(ynh_app_setting_get $app ssh_user)
 export public_key=$(ynh_app_setting_get $app public_key)
+export quota=$(ynh_app_setting_get $app quota)
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
@@ -40,7 +41,7 @@ pip3 install borgbackup
 #=================================================
 # CREATE SSH USER USED BY BORG
 #=================================================
-adduser $ssh_user -s /bin/bash --disabled-password
+adduser $ssh_user --quiet --gecos ",,," --shell /bin/bash --disabled-password
 
 #=================================================
 # AUTORIZE SSH FOR THIS USER
@@ -48,7 +49,11 @@ adduser $ssh_user -s /bin/bash --disabled-password
 home=/home/$ssh_user
 mkdir -p /home/$ssh_user/.ssh
 touch /home/$ssh_user/.ssh/authorized_keys
-echo "command=\"borg serve --restrict-to-path /home/$ssh_user/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> /home/$ssh_user/.ssh/authorized_keys
+extra="--storage-quota $quota"
+if [ "$quota" = "" ]; then
+    extra=""
+fi
+echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> /home/$ssh_user/.ssh/authorized_keys
 
 #=================================================
 # AVOID BACKUP OF BACKUP
