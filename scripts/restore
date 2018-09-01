@@ -32,11 +32,16 @@ export public_key=$(ynh_app_setting_get $app public_key)
 export quota=$(ynh_app_setting_get $app quota)
 
 #=================================================
-# STORE SETTINGS FROM MANIFEST
+# CONFIGURE BACKPORTS
+#=================================================
+# We need borg 1.1+ available only in backports
+ynh_install_backports
+
+#=================================================
+# INSTALL DEPENDENCIES
 #=================================================
 ynh_install_app_dependencies $pkg_dependencies
-pip3 install setuptools --upgrade
-pip3 install borgbackup
+ynh_package_install -t stretch-backports borgbackup
 
 #=================================================
 # CREATE SSH USER USED BY BORG
