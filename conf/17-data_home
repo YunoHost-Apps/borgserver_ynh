@@ -7,13 +7,13 @@ set -eu
 source /usr/share/yunohost/helpers.d/filesystem
 
 # Backup destination
-backup_dir="\${1}/data/home"
+backup_dir="${1}/data/home"
 
 # Backup user home
-for f in \$(find /home/* -type d -prune | awk -F/ '{print \$NF}'); do
-    if [[ ! "\$f" =~ ^yunohost|lost\+found ]]; then
-        if [ ! -e "/home/\$f/.nobackup" ]; then
-            ynh_backup "/home/\$f" "${backup_dir}/\$f" 1
+for f in $(find /home/* -type d -prune | awk -F/ '{print $NF}'); do
+    if [[ ! "$f" =~ ^yunohost|lost\+found ]]; then
+        if [ ! -e "/home/$f/.nobackup" ]; then
+            ynh_backup "/home/$f" "${backup_dir}/$f" 1
         fi
     fi
 done
