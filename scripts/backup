@@ -21,4 +21,4 @@ ynh_abort_if_errors
 
 app=$YNH_APP_INSTANCE_NAME
 
-
+ynh_backup "/etc/yunohost/hooks.d/backup/17-data_home"
