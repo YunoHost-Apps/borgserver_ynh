@@ -59,6 +59,17 @@ ynh_configure () {
     ynh_store_file_checksum $2
 }
 
+ynh_read_json () {
+    sudo python3 -c "import sys, json;print(json.load(open('$1'))['$2'])"
+}
+
+ynh_read_manifest () {
+    if [ -f '../manifest.json' ] ; then
+        ynh_read_json '../manifest.json' "$1"
+    else
+        ynh_read_json '../settings/manifest.json' "$1"
+    fi
+}
 # Checks the app version to upgrade with the existing app version and returns:
 # - UPGRADE_APP if the upstream app version has changed
 # - UPGRADE_PACKAGE if only the YunoHost package has changed
