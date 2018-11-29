@@ -17,5 +17,3 @@ for f in $(find /home/* -type d -prune | awk -F/ '{print $NF}'); do
         fi
     fi
 done
-EOF
-
