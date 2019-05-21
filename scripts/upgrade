@@ -33,3 +33,15 @@ ynh_clean_setup () {
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
+# Replace backports with pip
+if is_stretch; then
+    ynh_remove_backports
+
+    if [ ! -d /opt/borg-env ]; then
+        virtualenv --python=python3 /opt/borg-env
+        /opt/borg-env/bin/python /opt/borg-env/bin/pip install borgbackup
+        echo "#!/bin/bash
+/opt/borg-env/bin/python /opt/borg-env/bin/borg \"\$@\"" > /usr/local/bin/borg
+    	chmod u+x /usr/local/bin/borg
+    fi
+fi
