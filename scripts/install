@@ -30,16 +30,17 @@ ynh_export ssh_user public_key quota
 ynh_save_args ssh_user public_key quota
 
 #=================================================
-# CONFIGURE BACKPORTS
-#=================================================
-# We need borg 1.1+ available only in backports
-ynh_install_backports
-
-#=================================================
-# STORE SETTINGS FROM MANIFEST
+# INSTALL DEPENDENCIES
 #=================================================
 ynh_install_app_dependencies $pkg_dependencies
-ynh_package_install -t stretch-backports borgbackup
+
+if [ ! -d /opt/borg-env ]; then
+    virtualenv --python=python3 /opt/borg-env
+    /opt/borg-env/bin/python /opt/borg-env/bin/pip install borgbackup
+    echo "#!/bin/bash
+/opt/borg-env/bin/python /opt/borg-env/bin/borg \"\$@\"" > /usr/local/bin/borg
+    chmod u+x /usr/local/bin/borg
+fi
 
 #=================================================
 # CREATE SSH USER USED BY BORG

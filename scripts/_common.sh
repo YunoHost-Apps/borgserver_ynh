@@ -116,10 +116,6 @@ ynh_check_app_version_changed () {
 }
 
 
-ynh_install_backports () {
-    echo "deb http://httpredir.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/$app-stretch-backports.list
-}
-
 ynh_remove_backports () {
     rm /etc/apt/sources.list.d/$app-stretch-backports.list
 }
