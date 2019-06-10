@@ -22,11 +22,6 @@ ssh_user=$(ynh_app_setting_get $app ssh_user)
 ynh_remove_app_dependencies
 
 #=================================================
-# REMOVE BACKPORTS
-#=================================================
-ynh_remove_backports
-
-#=================================================
 # REMOVE FILES
 #=================================================
 userdel $ssh_user
