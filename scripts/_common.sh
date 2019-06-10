@@ -128,5 +128,5 @@ ynh_check_app_version_changed () {
 
 
 ynh_remove_backports () {
-    rm /etc/apt/sources.list.d/$app-stretch-backports.list
+    rm -f /etc/apt/sources.list.d/$app-stretch-backports.list
 }
