@@ -21,8 +21,14 @@ ynh_abort_if_errors
 #=================================================
 export app=$YNH_APP_INSTANCE_NAME
 
+
 # Retrieve arguments
 ynh_export ssh_user public_key quota
+
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THIS ARGS
+#=================================================
+ynh_system_user_exists --username=$ssh_user || ynh_die --message="This user already exists"
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
