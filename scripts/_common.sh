@@ -26,7 +26,7 @@ ynh_export () {
     local ynh_arg=""
     for var in $@;
     do
-        ynh_arg=$(echo $var | awk '{print toupper($0)}')
+        ynh_arg=$(echo "$var" | awk '{print toupper($0)}')
         if [ "$var" == "path_url" ]; then
             ynh_arg="PATH"
         fi
@@ -43,7 +43,7 @@ ynh_save_args () {
         if [ "$var" == "path_url" ]; then
             setting_var="path"
         fi
-        ynh_app_setting_set $app $setting_var ${!var}
+        ynh_app_setting_set $app $setting_var "${!var}"
     done
 }
 
