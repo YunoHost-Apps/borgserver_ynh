@@ -39,3 +39,4 @@ if is_stretch; then
 
     install_borg_with_pip
 fi
+rm -f /etc/yunohost/hooks.d/backup/17-data_home
