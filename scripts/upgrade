@@ -14,6 +14,7 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 app=$YNH_APP_INSTANCE_NAME
+ssh_user=$(ynh_app_setting_get --app=$app --key=ssh_user)
 
 #=================================================
 # CHECK IF AN UPGRADE IS NEEDED
@@ -33,8 +34,21 @@ ynh_clean_setup () {
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
-# Replace backports with pip
-rm -f /etc/apt/sources.list.d/$app-stretch-backports.list
 
-install_borg_with_pip
-ynh_secure_remove /etc/yunohost/hooks.d/backup/17-data_home
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_script_progression --message="Ensuring downward compatibility..."
+
+if [ -f "/etc/apt/sources.list.d/$app-stretch-backports.list" ]; then
+    rm -f /etc/apt/sources.list.d/$app-stretch-backports.list
+    install_borg_with_pip
+fi
+
+if [ -f "/etc/yunohost/hooks.d/backup/17-data_home" ]; then
+    ynh_secure_remove /etc/yunohost/hooks.d/backup/17-data_home
+fi
+
+if echo "$ssh_user" | grep -v ' '; then
+    ynh_app_setting_set --app=$app --key=ssh_user --value="$(grep -Po 'no-user-rc \K.*$' /home/$ssh_user/.ssh/authorized_keys)"
+fi
