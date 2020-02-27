@@ -34,9 +34,7 @@ ynh_clean_setup () {
 ynh_abort_if_errors
 
 # Replace backports with pip
-if is_stretch; then
-    rm -f /etc/apt/sources.list.d/$app-stretch-backports.list
+rm -f /etc/apt/sources.list.d/$app-stretch-backports.list
 
-    install_borg_with_pip
-fi
-rm -f /etc/yunohost/hooks.d/backup/17-data_home
+install_borg_with_pip
+ynh_secure_remove /etc/yunohost/hooks.d/backup/17-data_home
