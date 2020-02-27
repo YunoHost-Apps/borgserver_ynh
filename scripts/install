@@ -56,6 +56,4 @@ echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/backu
 # AVOID BACKUP OF BACKUP
 #=================================================
 touch $home/.nobackup
-mkdir -p /etc/yunohost/hooks.d/backup
-cp -f ../conf/17-data_home /etc/yunohost/hooks.d/backup/17-data_home
 
