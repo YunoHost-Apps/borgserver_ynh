@@ -56,5 +56,13 @@ fi
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Upgrading dependencies..."
+
 ynh_install_app_dependencies $pkg_dependencies
 install_borg_with_pip
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Upgrade of $app completed" --last

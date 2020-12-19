@@ -1,4 +1,4 @@
-# Borg server for YunoHost
+# Borg Server for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)  
 [![Install Borg Server with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=borgserver)
@@ -21,13 +21,13 @@ The main goal of Borg is to provide an efficient and secure way to backup data. 
 
 #### Multi-user support
 
-Are LDAP and HTTP auth supported?
-Can the app be used by multiple users?
+ * Are LDAP and HTTP auth supported?
+ * Can the app be used by multiple users?
 
 #### Supported architectures
 
 * x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/borgserver%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/borgserver/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/REPLACEBYYOURAPP%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/borgserver/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/borgserver%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/borgserver/)
 
 ## Limitations
 
