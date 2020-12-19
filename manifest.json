@@ -23,14 +23,16 @@
         "install" : [
             {
                 "name": "ssh_user",
+                "type": "string",
                 "ask": {
-                    "en": "Indicate the ssh user to create",
-                    "fr": "Indiquez l'utilisateur ssh à créer"
+                    "en": "Indicate the SSH user to create",
+                    "fr": "Indiquez l'utilisateur SSH à créer"
                 },
                 "example": "john"
             },
             {
                 "name": "public_key",
+                "type": "string",
                 "ask": {
                     "en": "Indicate the public key given by borg_ynh app",
                     "fr": "Indiquez la clé publique donnée par l'app borg_ynh"
@@ -38,6 +40,7 @@
             },
             {
                 "name": "quota",
+                "type": "string",
                 "ask": {
                     "en": "Indicate the storage quota",
                     "fr": "Indiquez le quota de stockage"
