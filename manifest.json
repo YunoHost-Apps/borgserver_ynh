@@ -6,7 +6,7 @@
         "en": "Offer backup storage to a friend.",
         "fr": "Offrez un espace de stockage à un⋅e ami⋅e."
     },
-    "version": "1.1.10~ynh5",
+    "version": "1.1.14~ynh1",
     "url": "https://borgbackup.readthedocs.io",
     "license": "BSD-3-Clause",
     "maintainer": {
@@ -15,22 +15,24 @@
         "url": "https://reflexlibre.net"
     },
     "requirements": {
-        "yunohost": ">= 3.6"
+        "yunohost": ">= 3.8.1"
     },
-    "multi_instance": true,
+    "multi_instance": false,
     "services": [],
     "arguments": {
         "install" : [
             {
                 "name": "ssh_user",
+                "type": "string",
                 "ask": {
-                    "en": "Indicate the ssh user to create",
-                    "fr": "Indiquez l'utilisateur ssh à créer"
+                    "en": "Indicate the SSH user to create",
+                    "fr": "Indiquez l'utilisateur SSH à créer"
                 },
                 "example": "john"
             },
             {
                 "name": "public_key",
+                "type": "string",
                 "ask": {
                     "en": "Indicate the public key given by borg_ynh app",
                     "fr": "Indiquez la clé publique donnée par l'app borg_ynh"
@@ -38,6 +40,7 @@
             },
             {
                 "name": "quota",
+                "type": "string",
                 "ask": {
                     "en": "Indicate the storage quota",
                     "fr": "Indiquez le quota de stockage"

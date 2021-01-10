@@ -19,9 +19,18 @@ ssh_user=$(ynh_app_setting_get $app ssh_user)
 #=================================================
 # REMOVE DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Removing dependencies..."
+
 ynh_remove_app_dependencies
 
 #=================================================
 # REMOVE FILES
 #=================================================
+
 userdel $ssh_user
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Removal of $app completed" --last

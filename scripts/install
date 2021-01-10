@@ -19,8 +19,8 @@ ynh_abort_if_errors
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
-export app=$YNH_APP_INSTANCE_NAME
 
+export app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
 ynh_export ssh_user public_key quota
@@ -28,27 +28,34 @@ ynh_export ssh_user public_key quota
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THIS ARGS
 #=================================================
+
 ynh_system_user_exists --username=$ssh_user && ynh_die --message="This user already exists"
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
+
 ynh_save_args ssh_user public_key quota
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Installing dependencies..."
+
 ynh_install_app_dependencies $pkg_dependencies
 install_borg_with_pip
 
 #=================================================
 # CREATE SSH USER USED BY BORG
 #=================================================
+ynh_script_progression --message="Creat SSH user used by Borg..."
+
 adduser $ssh_user --quiet --gecos ",,," --shell /bin/bash --disabled-password
 
 #=================================================
 # AUTORIZE SSH FOR THIS USER
 #=================================================
+
 home=/home/$ssh_user
 mkdir -p /home/$ssh_user/.ssh
 touch /home/$ssh_user/.ssh/authorized_keys
@@ -61,5 +68,11 @@ echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/backu
 #=================================================
 # AVOID BACKUP OF BACKUP
 #=================================================
+
 touch $home/.nobackup
 
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Installation of $app completed" --last

@@ -19,6 +19,7 @@ ssh_user=$(ynh_app_setting_get --app=$app --key=ssh_user)
 #=================================================
 # CHECK IF AN UPGRADE IS NEEDED
 #=================================================
+
 ynh_check_app_version_changed
 
 #=================================================
@@ -33,7 +34,6 @@ ynh_clean_setup () {
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
-
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -52,3 +52,17 @@ fi
 if echo "$ssh_user" | grep -v ' '; then
     ynh_app_setting_set --app=$app --key=ssh_user --value="$(grep -Po 'no-user-rc \K.*$' /home/$ssh_user/.ssh/authorized_keys)"
 fi
+
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Upgrading dependencies..."
+
+ynh_install_app_dependencies $pkg_dependencies
+install_borg_with_pip
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Upgrade of $app completed" --last
