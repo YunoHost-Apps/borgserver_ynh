@@ -29,17 +29,21 @@ export quota=$(ynh_app_setting_get $app quota)
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Reinstalling dependencies..."
+
 ynh_install_app_dependencies $pkg_dependencies
 install_borg_with_pip
 
 #=================================================
 # CREATE SSH USER USED BY BORG
 #=================================================
+
 adduser $ssh_user --quiet --gecos ",,," --shell /bin/bash --disabled-password
 
 #=================================================
 # AUTORIZE SSH FOR THIS USER
 #=================================================
+
 home=/home/$ssh_user
 mkdir -p /home/$ssh_user/.ssh
 touch /home/$ssh_user/.ssh/authorized_keys
@@ -52,6 +56,12 @@ echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/backu
 #=================================================
 # AVOID BACKUP OF BACKUP
 #=================================================
+
 touch $home/.nobackup
 ynh_restore
 
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Restoration completed for $app" --last
