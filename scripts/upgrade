@@ -50,7 +50,7 @@ if [ -f "/etc/yunohost/hooks.d/backup/17-data_home" ]; then
 fi
 
 if echo "$ssh_user" | grep -v ' '; then
-    ynh_app_setting_set --app=$app --key=ssh_user --value="$(grep -Po 'no-user-rc \K.*$' /home/$ssh_user/.ssh/authorized_keys)"
+    ynh_app_setting_set --app=$app --key=public_key --value="$(grep -Po 'no-user-rc \K.*$' /home/$ssh_user/.ssh/authorized_keys)"
 fi
 
 #=================================================
