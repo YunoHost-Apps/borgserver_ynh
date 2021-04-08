@@ -18,5 +18,23 @@ ynh_abort_if_errors
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_print_info --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
+export ssh_user="$(ynh_app_setting_get $app ssh_user)"
+
+#=================================================
+# DECLARE DATA AND CONF FILES TO BACKUP
+#=================================================
+ynh_print_info --message="Declaring files to be backed up..."
+ynh_backup "/home/$ssh_user/.ssh"
+ynh_backup "/home/$ssh_user/.nobackup"
+ynh_backup "/etc/cron.d/$app"
+
+ynh_print_info --message="Borg backup repo in /home/$ssh_user/ won't be backup to avoid backup of backup loop issue."
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_print_info --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."

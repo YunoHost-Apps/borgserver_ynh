@@ -6,7 +6,7 @@
         "en": "Offer backup storage to a friend.",
         "fr": "Offrez un espace de stockage à un⋅e ami⋅e."
     },
-    "version": "1.1.14~ynh1",
+    "version": "1.1.16~ynh1",
     "url": "https://borgbackup.readthedocs.io",
     "license": "BSD-3-Clause",
     "maintainer": {
@@ -17,7 +17,7 @@
     "requirements": {
         "yunohost": ">= 3.8.1"
     },
-    "multi_instance": false,
+    "multi_instance": true,
     "services": [],
     "arguments": {
         "install" : [
@@ -37,6 +37,25 @@
                     "en": "Indicate the public key given by borg_ynh app",
                     "fr": "Indiquez la clé publique donnée par l'app borg_ynh"
                 }
+            },
+            {
+                "name": "alert_delay",
+                "type": "number",
+                "ask": {
+                    "en": "After which delay in days should we alert if there are no changes on repo ?",
+                    "fr": "Après quel délais en jours devons-nous lancer une alerte si il n'y a pas de changement dans le repo ?"
+                },
+                "default": "1"
+            },
+            {
+                "name": "alert_mails",
+                "type": "string",
+                "ask": {
+                    "en": "Emails to whom send alerts ?",
+                    "fr": "Emails des personnes à qui envoyer les alertes ?"
+                },
+                "default": "root",
+                "example": "camille@example.com,eden@example.com"
             },
             {
                 "name": "quota",
