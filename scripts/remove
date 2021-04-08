@@ -23,11 +23,23 @@ ynh_script_progression --message="Removing dependencies..."
 
 ynh_remove_app_dependencies
 
-#=================================================
-# REMOVE FILES
-#=================================================
+# Remove borg if we are removing the last borg app on the system
+if [ "$(yunohost app list | grep "id: borg" | wc -l)" == "1" ] ; then 
+    ynh_secure_remove "/opt/borg-env"
+    ynh_secure_remove "/usr/local/bin/borg"
+fi
 
+#=================================================
+# REMOVE USER BUT KEEP FILES
+#=================================================
+# We keep files cause we don't know what the user want to do about
+# backups stored in the home directory
 userdel $ssh_user
+
+#=================================================
+# REMOVE CRON FILES
+#=================================================
+ynh_secure_remove "/etc/cron.d/$app"
 
 #=================================================
 # END OF SCRIPT

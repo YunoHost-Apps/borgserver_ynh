@@ -26,12 +26,14 @@ ynh_check_app_version_changed
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
 
-# Backup the current version of the app
-ynh_backup_before_upgrade
-ynh_clean_setup () {
-	# restore it if the upgrade fails
-	ynh_restore_upgradebackup
-}
+# We don't backup before upgrade cause we don't want accidental
+# remove of repo if upgrade failed
+
+#ynh_backup_before_upgrade
+#ynh_clean_setup () {
+#	# restore it if the upgrade fails
+#	ynh_restore_upgradebackup
+#}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
@@ -49,17 +51,47 @@ if [ -f "/etc/yunohost/hooks.d/backup/17-data_home" ]; then
     ynh_secure_remove /etc/yunohost/hooks.d/backup/17-data_home
 fi
 
-if echo "$ssh_user" | grep -v ' '; then
+if echo "$ssh_user" | grep -q ' '; then
+    ynh_app_setting_set --app=$app --key=ssh_user --value="$(grep "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIadutuK2" /home/*/.ssh/authorized_keys | grep borg | cut -d/ -f3)"
+fi
+
+if echo "$public_key" | grep -q -v ' '; then
     ynh_app_setting_set --app=$app --key=public_key --value="$(grep -Po 'no-user-rc \K.*$' /home/$ssh_user/.ssh/authorized_keys)"
 fi
 
+# Reinstall borg if debian change of major version
+if [ ! -f "/opt/borg-env/$(ynh_get_debian_release)" ] ; then
+    ynh_secure_remove /opt/borg-env
+fi
+
 #=================================================
-# INSTALL DEPENDENCIES
+# UPGRADE DEPENDENCIES
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..."
 
 ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
+# SPECIFIC UPGRADE
+#=================================================
+# Upgrade borgbackup
+#=================================================
+ynh_script_progression --message="Upgrading borgbackup..." --weight=1
+
 install_borg_with_pip
+
+#=================================================
+# AVOID BACKUP OF BACKUP
+#=================================================
+ynh_script_progression --message="Avoiding to backup the backup itself..."
+
+touch $home/.nobackup
+
+#=================================================
+# SETUP CRON
+#=================================================
+ynh_script_progression --message="Configuring cron to monitor backup..."
+ynh_add_config --template="monitor-backup" --destination="/etc/cron.d/$app"
 
 #=================================================
 # END OF SCRIPT
