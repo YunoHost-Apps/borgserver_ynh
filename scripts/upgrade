@@ -15,6 +15,9 @@ source /usr/share/yunohost/helpers
 
 app=$YNH_APP_INSTANCE_NAME
 ssh_user=$(ynh_app_setting_get --app=$app --key=ssh_user)
+public_key=$(ynh_app_setting_get --app=$app --key=public_key)
+alert_delay=$(ynh_app_setting_get --app=$app --key=alert_delay)
+alert_mails=$(ynh_app_setting_get --app=$app --key=alert_mails)
 
 #=================================================
 # CHECK IF AN UPGRADE IS NEEDED
@@ -57,6 +60,12 @@ fi
 
 if echo "$public_key" | grep -q -v ' '; then
     ynh_app_setting_set --app=$app --key=public_key --value="$(grep -Po 'no-user-rc \K.*$' /home/$ssh_user/.ssh/authorized_keys)"
+fi
+
+# Alert delay and alert mail missing
+if [ -z "$alert_delay" ]; then
+	ynh_app_setting_set --app=$app --key=alert_delay --value=1
+	ynh_app_setting_set --app=$app --key=alert_mails --value="root"
 fi
 
 # Reinstall borg if debian change of major version
