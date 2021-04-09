@@ -94,7 +94,7 @@ install_borg_with_pip
 #=================================================
 ynh_script_progression --message="Avoiding to backup the backup itself..."
 
-touch $home/.nobackup
+touch /home/$ssh_user/.nobackup
 
 #=================================================
 # SETUP CRON
