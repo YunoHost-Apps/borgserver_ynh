@@ -28,7 +28,11 @@ ynh_export ssh_user public_key quota alert_delay alert_mails
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THIS ARGS
 #=================================================
-
+# Here is a small hack to avoid multi install CI test to fail due 
+# to same ssh_user provided
+if [[ "$PACKAGE_CHECK_EXEC" = "1" ]] ; then
+    ssh_user+="$YNH_APP_INSTANCE_NUMBER"
+fi
 ynh_system_user_exists --username=$ssh_user && ynh_die --message="This user already exists"
 
 #=================================================
