@@ -55,6 +55,7 @@ if [ -f "/etc/yunohost/hooks.d/backup/17-data_home" ]; then
 fi
 
 # Fix broken value ssh_user that mistakenly got replaced by the public key in previous versions...
+[ -n "$ssh_user" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
 if echo "$ssh_user" | grep -q ' '; then
     ssh_user=$(grep "$ssh_user" /home/*/.ssh/authorized_keys | grep borg | cut -d/ -f3)
     [ -n "$ssh_user" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
