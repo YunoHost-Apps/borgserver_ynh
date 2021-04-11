@@ -57,6 +57,7 @@ fi
 # Fix broken value ssh_user that mistakenly got replaced by the public key in previous versions...
 if echo "$ssh_user" | grep -q ' '; then
     ssh_user=$(grep "$ssh_user" /home/*/.ssh/authorized_keys | grep borg | cut -d/ -f3)
+    [ -n "$ssh_user" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
     ynh_app_setting_set --app=$app --key=ssh_user --value="$ssh_user"
 fi
 
