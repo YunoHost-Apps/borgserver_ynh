@@ -54,7 +54,7 @@ install_borg_with_pip
 #=================================================
 ynh_script_progression --message="Creating SSH user used by Borg..."
 
-adduser $ssh_user --quiet --gecos ",,," --shell /bin/bash --disabled-password
+ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
 
 #=================================================
 # AUTORIZE SSH FOR THIS USER
