@@ -34,7 +34,7 @@ fi
 #=================================================
 # We keep files cause we don't know what the user want to do about
 # backups stored in the home directory
-userdel $ssh_user
+ynh_system_user_delete --username=$ssh_user
 
 #=================================================
 # REMOVE CRON FILES

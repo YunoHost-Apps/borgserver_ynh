@@ -78,6 +78,13 @@ if [ ! -f "/opt/borg-env/$(ynh_get_debian_release)" ] ; then
 fi
 
 #=================================================
+# CREATE SSH USER USED BY BORG
+#=================================================
+ynh_script_progression --message="Creating SSH user used by Borg..."
+
+ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
+
+#=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
 ynh_script_progression --message="Upgrading dependencies..."
