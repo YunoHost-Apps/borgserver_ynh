@@ -101,6 +101,15 @@ ynh_script_progression --message="Upgrading borgbackup..." --weight=1
 install_borg_with_pip
 
 #=================================================
+# AUTORIZE SSH FOR THIS USER
+#=================================================
+ynh_script_progression --message="Seting good permissions..."
+
+mkdir -p /home/$ssh_user/.ssh
+chmod o=--- /home/$ssh_user
+chown -R $ssh_user:$ssh_user /home/$ssh_user
+
+#=================================================
 # AVOID BACKUP OF BACKUP
 #=================================================
 ynh_script_progression --message="Avoiding to backup the backup itself..."
