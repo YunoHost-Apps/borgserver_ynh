@@ -15,6 +15,7 @@ source /usr/share/yunohost/helpers
 
 app=$YNH_APP_INSTANCE_NAME
 ssh_user=$(ynh_app_setting_get --app=$app --key=ssh_user)
+respository_folder=$(ynh_app_setting_get --app=$app --key=respository_folder)
 public_key=$(ynh_app_setting_get --app=$app --key=public_key)
 alert_delay=$(ynh_app_setting_get --app=$app --key=alert_delay)
 alert_mails=$(ynh_app_setting_get --app=$app --key=alert_mails)
@@ -75,6 +76,11 @@ fi
 # Reinstall borg if debian change of major version
 if [ ! -f "/opt/borg-env/$(ynh_get_debian_release)" ] ; then
     ynh_secure_remove /opt/borg-env
+fi
+
+# If respository_folder setting is missing, set it to default value
+if [ -z "$respository_folder" ]; then
+	ynh_app_setting_set --app=$app --key=respository_folder --value=backup
 fi
 
 #=================================================

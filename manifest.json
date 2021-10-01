@@ -31,6 +31,16 @@
                 "example": "john"
             },
             {
+                "name": "respository_folder",
+                "type": "string",
+                "ask": {
+                    "en": "Indicate the folder in which to create backups (it will be created in the home directory of your ssh user)",
+                    "fr": "Indiquez le dossier dans lequel créer les sauvegardes (il sera créé dans le dossier de l'utilisateur ssh)"
+                },
+                "example": "my_backups",
+                "default": "backup"
+            },
+            {
                 "name": "public_key",
                 "type": "string",
                 "ask": {

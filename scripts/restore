@@ -23,6 +23,7 @@ ynh_abort_if_errors
 app=$YNH_APP_INSTANCE_NAME
 
 export ssh_user=$(ynh_app_setting_get $app ssh_user)
+export respository_folder=$(ynh_app_setting_get $app respository_folder)
 export public_key=$(ynh_app_setting_get $app public_key)
 export quota=$(ynh_app_setting_get $app quota)
 
@@ -54,7 +55,7 @@ extra="--storage-quota $quota"
 if [ "$quota" = "" ]; then
     extra=""
 fi
-echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> /home/$ssh_user/.ssh/authorized_keys
+echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/$respository_folder\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> /home/$ssh_user/.ssh/authorized_keys
 
 #=================================================
 # AVOID BACKUP OF BACKUP
