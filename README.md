@@ -17,6 +17,12 @@ The main goal of Borg is to provide an efficient and secure way to backup data. 
  * Official documentation: https://borgbackup.readthedocs.io/en/stable/
  * YunoHost documentation: If specific documentation is needed, feel free to contribute.
 
+#### Customizing the backup location
+
+This app lets you customize the folder in which to store your backups. However you can only choose a folder within the borgserver user home directory.
+If you want to store your backups elsewhere, like in an external drive, you could for example use the following command : `mount --bind /backup/path /home/borserver_ssh_user/repository_folder` (where `/backup/path` is your external storage and `/home/borserver_ssh_user/repository_folder` corresponds to the values you passed when installing borgserver).
+Also, you should make sure that `/backup/path` is accessible to the user created by borgserver.
+
 ## YunoHost specific features
 
 #### Multi-user support
