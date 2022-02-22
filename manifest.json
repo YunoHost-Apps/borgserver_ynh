@@ -6,6 +6,12 @@
         "en": "Offer backup storage to a friend.",
         "fr": "Offrez un espace de stockage à un⋅e ami⋅e."
     },
+    "upstream": {
+        "license": "BSD-3-Clause",
+        "website": "https://www.borgbackup.org/",
+        "admindoc": "https://borgbackup.readthedocs.io/en/stable/",
+        "code": "https://github.com/borgbackup/borg"
+    },
     "version": "1.1.16~ynh9",
     "url": "https://borgbackup.readthedocs.io",
     "license": "BSD-3-Clause",
