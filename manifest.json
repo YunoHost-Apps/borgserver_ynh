@@ -48,8 +48,8 @@
                 "name": "datadir",
                 "type": "string",
                 "ask": {
-                    "en": "Indicate the directory where create the user directory with the borg archive",
-                    "fr": "Indiquez le dossier où créer le dossier utilisateur contenant l'archive borg"
+                    "en": "Indicate the path of the ssh user home directory where create the borg archive",
+                    "fr": "Indiquez le chemin du dossier de l'utilisateur ssh où créer l'archive borg"
                 },
                 "default": "/home/__SSH_USER__"
             },
