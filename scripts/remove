@@ -15,6 +15,7 @@ source /usr/share/yunohost/helpers
 
 app=$YNH_APP_INSTANCE_NAME
 ssh_user=$(ynh_app_setting_get $app ssh_user)
+datadir=$(ynh_app_setting_get $app ssh_user)
 
 #=================================================
 # REMOVE DEPENDENCIES
@@ -35,6 +36,17 @@ fi
 # We keep files cause we don't know what the user want to do about
 # backups stored in the home directory
 ynh_system_user_delete --username=$ssh_user
+
+#=================================================
+# REMOVE DATA DIR
+#=================================================
+
+# Remove the data directory if --purge option is used
+if [ "${YNH_APP_PURGE:-0}" -eq 1 ]
+then
+	ynh_script_progression --message="Removing app data directory..." --weight=1
+	ynh_secure_remove --file="$datadir"
+fi
 
 #=================================================
 # REMOVE CRON FILES

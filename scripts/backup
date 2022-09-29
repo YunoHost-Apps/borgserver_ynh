@@ -22,16 +22,17 @@ ynh_print_info --message="Loading installation settings..."
 
 app=$YNH_APP_INSTANCE_NAME
 export ssh_user="$(ynh_app_setting_get $app ssh_user)"
+export datadir="$(ynh_app_setting_get $app datadir)"
 
 #=================================================
 # DECLARE DATA AND CONF FILES TO BACKUP
 #=================================================
 ynh_print_info --message="Declaring files to be backed up..."
-ynh_backup "/home/$ssh_user/.ssh"
-ynh_backup "/home/$ssh_user/.nobackup"
+ynh_backup "$datadir/.ssh"
+ynh_backup "$datadir/.nobackup"
 ynh_backup "/etc/cron.d/$app"
 
-ynh_print_info --message="Borg backup repo in /home/$ssh_user/ won't be backup to avoid backup of backup loop issue."
+ynh_print_info --message="Borg backup repo in $datadir/ won't be backup to avoid backup of backup loop issue."
 
 #=================================================
 # END OF SCRIPT
