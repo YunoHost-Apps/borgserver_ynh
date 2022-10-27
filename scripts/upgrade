@@ -18,6 +18,7 @@ ssh_user=$(ynh_app_setting_get --app=$app --key=ssh_user)
 public_key=$(ynh_app_setting_get --app=$app --key=public_key)
 alert_delay=$(ynh_app_setting_get --app=$app --key=alert_delay)
 alert_mails=$(ynh_app_setting_get --app=$app --key=alert_mails)
+quota=$(ynh_app_setting_get --app=$app --key=quota)
 
 #=================================================
 # CHECK IF AN UPGRADE IS NEEDED
@@ -107,6 +108,11 @@ ynh_script_progression --message="Seting good permissions..."
 
 mkdir -p /home/$ssh_user/.ssh
 chmod o=--- /home/$ssh_user
+extra="--storage-quota $quota"
+if [ "$quota" = "" ]; then
+    extra=""
+fi
+echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> /home/$ssh_user/.ssh/authorized_keys
 chown -R $ssh_user:$ssh_user /home/$ssh_user
 
 #=================================================
