@@ -40,7 +40,7 @@ if [[ -z "$datadir" ]]; then
     datadir=/home/$ssh_user
 fi
 
-if ! _acceptable_path_to_delete "$datadir"; then
+if _acceptable_path_to_delete "$datadir"; then
     ynh_die --message="This path can't be used as home dir for the ssh_user"
 fi
 
