@@ -25,6 +25,7 @@ app=$YNH_APP_INSTANCE_NAME
 export ssh_user=$(ynh_app_setting_get $app ssh_user)
 export public_key=$(ynh_app_setting_get $app public_key)
 export quota=$(ynh_app_setting_get $app quota)
+export datadir=$(ynh_app_setting_get $app datadir)
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -45,22 +46,21 @@ ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_she
 # AUTORIZE SSH FOR THIS USER
 #=================================================
 
-home=/home/$ssh_user
-mkdir -p /home/$ssh_user/.ssh
-chmod o=--- /home/$ssh_user
-chown -R $ssh_user:$ssh_user /home/$ssh_user
-touch /home/$ssh_user/.ssh/authorized_keys
+mkdir -p $datadir/.ssh
+chmod o=--- $datadir
+chown -R $ssh_user:$ssh_user $datadir
+touch $datadir/.ssh/authorized_keys
 extra="--storage-quota $quota"
 if [ "$quota" = "" ]; then
     extra=""
 fi
-echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> /home/$ssh_user/.ssh/authorized_keys
+echo "command=\"borg serve $extra --restrict-to-repository $datadir/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> $datadir/.ssh/authorized_keys
 
 #=================================================
 # AVOID BACKUP OF BACKUP
 #=================================================
 
-touch $home/.nobackup
+touch $datadir/.nobackup
 ynh_restore
 
 #=================================================

@@ -45,6 +45,15 @@
                 }
             },
             {
+                "name": "datadir",
+                "type": "string",
+                "ask": {
+                    "en": "Indicate the path of the ssh user home directory where create the borg archive",
+                    "fr": "Indiquez le chemin du dossier de l'utilisateur ssh où créer l'archive borg"
+                },
+                "default": "/home/__SSH_USER__"
+            },
+            {
                 "name": "alert_delay",
                 "type": "string",
                 "ask": {

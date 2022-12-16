@@ -2,6 +2,7 @@
 	; Manifest
 		ssh_user="sam"
         public_key="ssh-ed25519 AAAACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+        datadir=/home/USER
         alert_delay=1
         alert_mails="sam@domain.tld"
         quota="1G"

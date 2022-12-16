@@ -23,7 +23,7 @@ ynh_abort_if_errors
 export app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
-ynh_export ssh_user public_key quota alert_delay alert_mails
+ynh_export ssh_user public_key quota datadir alert_delay alert_mails
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THIS ARGS
@@ -35,11 +35,21 @@ if [[ "${PACKAGE_CHECK_EXEC:-}" = "1" ]] ; then
 fi
 ynh_system_user_exists --username=$ssh_user && ynh_die --message="This user already exists"
 
+datadir=$(echo "$datadir" | sed "s/__SSH_USER__/$ssh_user/" | sed "s/__APP__/$app/")
+if [[ -z "$datadir" ]]; then
+    datadir=/home/$ssh_user
+fi
+
+if _acceptable_path_to_delete "$datadir"; then
+    ynh_die --message="This path can't be used as home dir for the ssh_user"
+fi
+
+
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
 
-ynh_save_args ssh_user public_key quota alert_delay alert_mails
+ynh_save_args ssh_user public_key quota alert_delay alert_mails datadir
 
 #=================================================
 # INSTALL DEPENDENCIES
@@ -54,30 +64,29 @@ install_borg_with_pip
 #=================================================
 ynh_script_progression --message="Creating SSH user used by Borg..."
 
-ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
+ynh_system_user_create --username=$ssh_user --home_dir=$datadir --use_shell --groups ssh.app
 
 #=================================================
 # AUTORIZE SSH FOR THIS USER
 #=================================================
 ynh_script_progression --message="Configuring SSH public key for remote connexion..."
 
-home=/home/$ssh_user
-mkdir -p /home/$ssh_user/.ssh
-chmod o=--- /home/$ssh_user
-chown -R $ssh_user:$ssh_user /home/$ssh_user
-touch /home/$ssh_user/.ssh/authorized_keys
+mkdir -p $datadir/.ssh
+chmod o=--- $datadir
+chown -R $ssh_user:$ssh_user $datadir
+touch $datadir/.ssh/authorized_keys
 extra="--storage-quota $quota"
 if [ "$quota" = "" ]; then
     extra=""
 fi
-echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> /home/$ssh_user/.ssh/authorized_keys
+echo "command=\"borg serve $extra --restrict-to-repository $datadir/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> $datadir/.ssh/authorized_keys
 
 #=================================================
 # AVOID BACKUP OF BACKUP
 #=================================================
 ynh_script_progression --message="Avoiding to backup the backup itself..."
 
-touch $home/.nobackup
+touch $datadir/.nobackup
 
 #=================================================
 # SETUP CRON

@@ -5,7 +5,7 @@ It shall NOT be edited by hand.
 
 # Borg Server for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![Working status](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)  
 [![Install Borg Server with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=borgserver)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -21,26 +21,24 @@ The main goal of Borg is to provide an efficient and secure way to backup data. 
 
 
 **Shipped version:** 1.1.16~ynh9
-
-
-
 ## Documentation and resources
 
-* Official app website: https://www.borgbackup.org/
-* Official admin documentation: https://borgbackup.readthedocs.io/en/stable/
-* Upstream app code repository: https://github.com/borgbackup/borg
-* YunoHost documentation for this app: https://yunohost.org/app_borgserver
-* Report a bug: https://github.com/YunoHost-Apps/borgserver_ynh/issues
+* Official app website: <https://www.borgbackup.org/>
+* Official admin documentation: <https://borgbackup.readthedocs.io/en/stable/>
+* Upstream app code repository: <https://github.com/borgbackup/borg>
+* YunoHost documentation for this app: <https://yunohost.org/app_borgserver>
+* Report a bug: <https://github.com/YunoHost-Apps/borgserver_ynh/issues>
 
 ## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/borgserver_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
-```
+
+``` bash
 sudo yunohost app install https://github.com/YunoHost-Apps/borgserver_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade borgserver -u https://github.com/YunoHost-Apps/borgserver_ynh/tree/testing --debug
 ```
 
-**More info regarding app packaging:** https://yunohost.org/packaging_apps
+**More info regarding app packaging:** <https://yunohost.org/packaging_apps>

@@ -16,6 +16,7 @@ source /usr/share/yunohost/helpers
 app=$YNH_APP_INSTANCE_NAME
 ssh_user=$(ynh_app_setting_get --app=$app --key=ssh_user)
 public_key=$(ynh_app_setting_get --app=$app --key=public_key)
+datadir=$(ynh_app_setting_get --app=$app --key=datadir)
 alert_delay=$(ynh_app_setting_get --app=$app --key=alert_delay)
 alert_mails=$(ynh_app_setting_get --app=$app --key=alert_mails)
 
@@ -77,12 +78,17 @@ if [ ! -f "/opt/borg-env/$(ynh_get_debian_release)" ] ; then
     ynh_secure_remove /opt/borg-env
 fi
 
+if [ -z "$datadir" ];
+then
+	datadir="/home/${ssh_user}"
+	ynh_app_setting_set --app=$app --key=datadir --value=$datadir
+fi
 #=================================================
 # CREATE SSH USER USED BY BORG
 #=================================================
 ynh_script_progression --message="Creating SSH user used by Borg..."
 
-ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
+ynh_system_user_create --username=$ssh_user --home_dir=$datadir --use_shell --groups ssh.app
 
 #=================================================
 # UPGRADE DEPENDENCIES
@@ -105,16 +111,16 @@ install_borg_with_pip
 #=================================================
 ynh_script_progression --message="Seting good permissions..."
 
-mkdir -p /home/$ssh_user/.ssh
-chmod o=--- /home/$ssh_user
-chown -R $ssh_user:$ssh_user /home/$ssh_user
+mkdir -p $datadir/.ssh
+chmod o=--- $datadir
+chown -R $ssh_user:$ssh_user $datadir
 
 #=================================================
 # AVOID BACKUP OF BACKUP
 #=================================================
 ynh_script_progression --message="Avoiding to backup the backup itself..."
 
-touch /home/$ssh_user/.nobackup
+touch $datadir/.nobackup
 
 #=================================================
 # SETUP CRON
