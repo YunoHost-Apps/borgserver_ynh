@@ -3,8 +3,8 @@
     "id": "borgserver",
     "packaging_format": 1,
     "description": {
-        "en": "Offer backup storage to a friend.",
-        "fr": "Offrez un espace de stockage à un⋅e ami⋅e."
+        "en": "Offer backup storage to a friend",
+        "fr": "Offrez un espace de stockage à un⋅e ami⋅e"
     },
     "upstream": {
         "license": "BSD-3-Clause",
