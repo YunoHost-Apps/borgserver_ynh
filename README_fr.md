@@ -5,7 +5,8 @@ It shall NOT be edited by hand.
 
 # Borg Server pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)
+
 [![Installer Borg Server avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=borgserver)
 
 *[Read this readme in english.](./README.md)*
@@ -20,13 +21,12 @@ Offer backup storage to a friend.
 The main goal of Borg is to provide an efficient and secure way to backup data. The data deduplication technique used makes Borg suitable for daily backups since only changes are stored. The authenticated encryption technique makes it suitable for backups to not fully trusted targets.
 
 
-**Version incluse :** 1.1.16~ynh9
+**Version incluse :** 1.2.6~ynh1
 ## Documentations et ressources
 
 * Site officiel de l’app : <https://www.borgbackup.org/>
 * Documentation officielle de l’admin : <https://borgbackup.readthedocs.io/en/stable/>
 * Dépôt de code officiel de l’app : <https://github.com/borgbackup/borg>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_borgserver>
 * Signaler un bug : <https://github.com/YunoHost-Apps/borgserver_ynh/issues>
 
 ## Informations pour les développeurs
