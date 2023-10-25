@@ -10,28 +10,10 @@ source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-# Exit if an error occurs during the execution of the script
-#REMOVEME? ynh_abort_if_errors
-
-#=================================================
-# LOAD SETTINGS
-#=================================================
-
-#REMOVEME? app=$YNH_APP_INSTANCE_NAME
-
-#REMOVEME? export ssh_user=$(ynh_app_setting_get $app ssh_user)
-#REMOVEME? export public_key=$(ynh_app_setting_get $app public_key)
-#REMOVEME? export quota=$(ynh_app_setting_get $app quota)
-
-#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
 #REMOVEME? ynh_script_progression --message="Reinstalling dependencies..."
 
-#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
 install_borg_with_pip
 
 #=================================================
@@ -39,7 +21,7 @@ install_borg_with_pip
 #=================================================
 ynh_script_progression --message="Creating SSH user used by Borg..."
 
-#REMOVEME? ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
+ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
 
 #=================================================
 # AUTORIZE SSH FOR THIS USER

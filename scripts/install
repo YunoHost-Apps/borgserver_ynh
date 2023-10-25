@@ -10,17 +10,8 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-# Exit if an error occurs during the execution of the script
-#REMOVEME? ynh_abort_if_errors
-
-#=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
-
-#REMOVEME? export app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
 ynh_export ssh_user public_key quota alert_delay alert_mails
@@ -44,9 +35,8 @@ ynh_save_args ssh_user public_key quota alert_delay alert_mails
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-#REMOVEME? ynh_script_progression --message="Installing dependencies..."
+ynh_script_progression --message="Installing dependencies..."
 
-#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
 install_borg_with_pip
 
 #=================================================
@@ -54,7 +44,7 @@ install_borg_with_pip
 #=================================================
 ynh_script_progression --message="Creating SSH user used by Borg..."
 
-#REMOVEME? ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
+ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
 
 #=================================================
 # AUTORIZE SSH FOR THIS USER
@@ -83,6 +73,7 @@ touch $home/.nobackup
 # SETUP CRON
 #=================================================
 ynh_script_progression --message="Configuring cron to monitor backup..."
+
 ynh_add_config --template="monitor-backup" --destination="/etc/cron.d/$app"
 
 #=================================================

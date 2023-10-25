@@ -10,18 +10,9 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-
-#REMOVEME? app=$YNH_APP_INSTANCE_NAME
-#REMOVEME? ssh_user=$(ynh_app_setting_get $app ssh_user)
-
-#=================================================
 # REMOVE DEPENDENCIES
 #=================================================
-#REMOVEME? ynh_script_progression --message="Removing dependencies..."
-
-#REMOVEME? ynh_remove_app_dependencies
+ynh_script_progression --message="Removing dependencies..."
 
 # Remove borg if we are removing the last borg app on the system
 if [ "$(yunohost app list | grep "id: borg" | wc -l)" == "1" ] ; then 
@@ -34,11 +25,13 @@ fi
 #=================================================
 # We keep files cause we don't know what the user want to do about
 # backups stored in the home directory
-#REMOVEME? ynh_system_user_delete --username=$ssh_user
+
+ynh_system_user_delete --username=$ssh_user
 
 #=================================================
 # REMOVE CRON FILES
 #=================================================
+
 ynh_secure_remove "/etc/cron.d/$app"
 
 #=================================================
