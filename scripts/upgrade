@@ -13,12 +13,12 @@ source /usr/share/yunohost/helpers
 # LOAD SETTINGS
 #=================================================
 
-app=$YNH_APP_INSTANCE_NAME
-ssh_user=$(ynh_app_setting_get --app=$app --key=ssh_user)
-public_key=$(ynh_app_setting_get --app=$app --key=public_key)
-alert_delay=$(ynh_app_setting_get --app=$app --key=alert_delay)
-alert_mails=$(ynh_app_setting_get --app=$app --key=alert_mails)
-quota=$(ynh_app_setting_get --app=$app --key=quota)
+#REMOVEME? app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? ssh_user=$(ynh_app_setting_get --app=$app --key=ssh_user)
+#REMOVEME? public_key=$(ynh_app_setting_get --app=$app --key=public_key)
+#REMOVEME? alert_delay=$(ynh_app_setting_get --app=$app --key=alert_delay)
+#REMOVEME? alert_mails=$(ynh_app_setting_get --app=$app --key=alert_mails)
+#REMOVEME? quota=$(ynh_app_setting_get --app=$app --key=quota)
 
 #=================================================
 # CHECK IF AN UPGRADE IS NEEDED
@@ -33,13 +33,13 @@ ynh_check_app_version_changed
 # We don't backup before upgrade cause we don't want accidental
 # remove of repo if upgrade failed
 
-#ynh_backup_before_upgrade
-#ynh_clean_setup () {
+#REMOVEME? #ynh_backup_before_upgrade
+#REMOVEME? #ynh_clean_setup () {
 #	# restore it if the upgrade fails
-#	ynh_restore_upgradebackup
+#REMOVEME? #	ynh_restore_upgradebackup
 #}
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -83,14 +83,14 @@ fi
 #=================================================
 ynh_script_progression --message="Creating SSH user used by Borg..."
 
-ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
+#REMOVEME? ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
 
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Upgrading dependencies..."
+#REMOVEME? ynh_script_progression --message="Upgrading dependencies..."
 
-ynh_install_app_dependencies $pkg_dependencies
+#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC UPGRADE

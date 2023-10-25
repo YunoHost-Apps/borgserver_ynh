@@ -7,7 +7,7 @@
 PKG_DIR=$(cd ../; pwd)
 BORG_VERSION=1.1.16
 
-pkg_dependencies="python3-pip python3-dev libacl1-dev libssl-dev liblz4-dev python3-jinja2 python3-setuptools python3-venv virtualenv libfuse-dev pkg-config"
+#REMOVEME? pkg_dependencies="python3-pip python3-dev libacl1-dev libssl-dev liblz4-dev python3-jinja2 python3-setuptools python3-venv virtualenv libfuse-dev pkg-config"
 
 # Install borg with pip if borg is not here
 install_borg_with_pip () {
@@ -35,10 +35,10 @@ ynh_export () {
     for var in $@;
     do
         ynh_arg=$(echo "$var" | awk '{print toupper($0)}')
-        if [ "$var" == "path_url" ]; then
+        if [ "$var" == "path" ]; then
             ynh_arg="PATH"
         fi
-        ynh_arg="YNH_APP_ARG_$ynh_arg"
+#REMOVEME?         ynh_arg="YNH_APP_ARG_$ynh_arg"
         export $var="${!ynh_arg}"
     done
 }
@@ -48,7 +48,7 @@ ynh_save_args () {
     for var in $@;
     do
         local setting_var="$var"
-        if [ "$var" == "path_url" ]; then
+        if [ "$var" == "path" ]; then
             setting_var="path"
         fi
         ynh_app_setting_set $app $setting_var "${!var}"

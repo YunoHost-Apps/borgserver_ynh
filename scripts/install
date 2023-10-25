@@ -14,13 +14,13 @@ source /usr/share/yunohost/helpers
 #=================================================
 
 # Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
+#REMOVEME? ynh_abort_if_errors
 
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-export app=$YNH_APP_INSTANCE_NAME
+#REMOVEME? export app=$YNH_APP_INSTANCE_NAME
 
 # Retrieve arguments
 ynh_export ssh_user public_key quota alert_delay alert_mails
@@ -44,9 +44,9 @@ ynh_save_args ssh_user public_key quota alert_delay alert_mails
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing dependencies..."
+#REMOVEME? ynh_script_progression --message="Installing dependencies..."
 
-ynh_install_app_dependencies $pkg_dependencies
+#REMOVEME? ynh_install_app_dependencies $pkg_dependencies
 install_borg_with_pip
 
 #=================================================
@@ -54,7 +54,7 @@ install_borg_with_pip
 #=================================================
 ynh_script_progression --message="Creating SSH user used by Borg..."
 
-ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
+#REMOVEME? ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
 
 #=================================================
 # AUTORIZE SSH FOR THIS USER
