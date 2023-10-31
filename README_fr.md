@@ -5,15 +5,16 @@ It shall NOT be edited by hand.
 
 # Borg Server pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)
+
 [![Installer Borg Server avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=borgserver)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Borg Server rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Borg Server rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 Offer backup storage to a friend.
 
@@ -23,10 +24,10 @@ The main goal of Borg is to provide an efficient and secure way to backup data. 
 **Version incluse :** 1.1.16~ynh9
 ## Documentations et ressources
 
-* Site officiel de l'app : <https://www.borgbackup.org/>
-* Documentation officielle de l'admin : <https://borgbackup.readthedocs.io/en/stable/>
-* Dépôt de code officiel de l'app : <https://github.com/borgbackup/borg>
-* Documentation YunoHost pour cette app : <https://yunohost.org/app_borgserver>
+* Site officiel de l’app : <https://www.borgbackup.org/>
+* Documentation officielle de l’admin : <https://borgbackup.readthedocs.io/en/stable/>
+* Dépôt de code officiel de l’app : <https://github.com/borgbackup/borg>
+* YunoHost Store: <https://apps.yunohost.org/app/borgserver>
 * Signaler un bug : <https://github.com/YunoHost-Apps/borgserver_ynh/issues>
 
 ## Informations pour les développeurs
@@ -41,4 +42,4 @@ ou
 sudo yunohost app upgrade borgserver -u https://github.com/YunoHost-Apps/borgserver_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
