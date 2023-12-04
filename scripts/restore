@@ -25,7 +25,7 @@ ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_she
 
 home=/home/$ssh_user
 mkdir -p $home/.ssh
-chmod o=--- $home/$ssh_user
+chmod o=--- $home
 extra="--storage-quota $quota"
 if [ "$quota" = "" ]; then
     extra=""
