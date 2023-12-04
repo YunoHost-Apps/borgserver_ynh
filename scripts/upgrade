@@ -10,36 +10,10 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# LOAD SETTINGS
-#=================================================
-
-app=$YNH_APP_INSTANCE_NAME
-ssh_user=$(ynh_app_setting_get --app=$app --key=ssh_user)
-public_key=$(ynh_app_setting_get --app=$app --key=public_key)
-alert_delay=$(ynh_app_setting_get --app=$app --key=alert_delay)
-alert_mails=$(ynh_app_setting_get --app=$app --key=alert_mails)
-quota=$(ynh_app_setting_get --app=$app --key=quota)
-
-#=================================================
 # CHECK IF AN UPGRADE IS NEEDED
 #=================================================
 
 ynh_check_app_version_changed
-
-#=================================================
-# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
-#=================================================
-
-# We don't backup before upgrade cause we don't want accidental
-# remove of repo if upgrade failed
-
-#ynh_backup_before_upgrade
-#ynh_clean_setup () {
-#	# restore it if the upgrade fails
-#	ynh_restore_upgradebackup
-#}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
 
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
@@ -56,7 +30,7 @@ if [ -f "/etc/yunohost/hooks.d/backup/17-data_home" ]; then
 fi
 
 # Fix broken value ssh_user that mistakenly got replaced by the public key in previous versions...
-[ -n "$ssh_user" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
+[ -n "${ssh_user:-}" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
 if echo "$ssh_user" | grep -q ' '; then
     ssh_user=$(grep "$ssh_user" /home/*/.ssh/authorized_keys | grep borg | cut -d/ -f3)
     [ -n "$ssh_user" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
@@ -68,7 +42,7 @@ if echo "$public_key" | grep -q -v ' '; then
 fi
 
 # Alert delay and alert mail missing
-if [ -z "$alert_delay" ]; then
+if [ -z "${alert_delay:-}" ]; then
 	ynh_app_setting_set --app=$app --key=alert_delay --value=1
 	ynh_app_setting_set --app=$app --key=alert_mails --value="root"
 fi
@@ -77,20 +51,6 @@ fi
 if [ ! -f "/opt/borg-env/$(ynh_get_debian_release)" ] ; then
     ynh_secure_remove /opt/borg-env
 fi
-
-#=================================================
-# CREATE SSH USER USED BY BORG
-#=================================================
-ynh_script_progression --message="Creating SSH user used by Borg..."
-
-ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
-
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..."
-
-ynh_install_app_dependencies $pkg_dependencies
 
 #=================================================
 # SPECIFIC UPGRADE
@@ -104,28 +64,28 @@ install_borg_with_pip
 #=================================================
 # AUTORIZE SSH FOR THIS USER
 #=================================================
-ynh_script_progression --message="Seting good permissions..."
+ynh_script_progression --message="Making sure SSH user exists with appropriate permissions..."
 
-mkdir -p /home/$ssh_user/.ssh
-chmod o=--- /home/$ssh_user
+ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
+
+home=/home/$ssh_user
+mkdir -p $home/.ssh
+chmod o=--- $home
 extra="--storage-quota $quota"
 if [ "$quota" = "" ]; then
     extra=""
 fi
-echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> /home/$ssh_user/.ssh/authorized_keys
-chown -R $ssh_user:$ssh_user /home/$ssh_user
+echo "command=\"borg serve $extra --restrict-to-repository $home/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> $home/.ssh/authorized_keys
+chown -R $ssh_user:$ssh_user $home
 
-#=================================================
-# AVOID BACKUP OF BACKUP
-#=================================================
-ynh_script_progression --message="Avoiding to backup the backup itself..."
-
-touch /home/$ssh_user/.nobackup
+# Tweak to prevent the backup of the backup itself
+touch $home/.nobackup
 
 #=================================================
 # SETUP CRON
 #=================================================
 ynh_script_progression --message="Configuring cron to monitor backup..."
+
 ynh_add_config --template="monitor-backup" --destination="/etc/cron.d/$app"
 
 #=================================================
