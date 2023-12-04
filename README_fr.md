@@ -27,6 +27,7 @@ The main goal of Borg is to provide an efficient and secure way to backup data. 
 * Site officiel de l’app : <https://www.borgbackup.org/>
 * Documentation officielle de l’admin : <https://borgbackup.readthedocs.io/en/stable/>
 * Dépôt de code officiel de l’app : <https://github.com/borgbackup/borg>
+* YunoHost Store: <https://apps.yunohost.org/app/borgserver>
 * Signaler un bug : <https://github.com/YunoHost-Apps/borgserver_ynh/issues>
 
 ## Informations pour les développeurs
