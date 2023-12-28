@@ -10,57 +10,34 @@ source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
-# LOAD SETTINGS
-#=================================================
-
-app=$YNH_APP_INSTANCE_NAME
-
-export ssh_user=$(ynh_app_setting_get $app ssh_user)
-export public_key=$(ynh_app_setting_get $app public_key)
-export quota=$(ynh_app_setting_get $app quota)
-
-#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Reinstalling dependencies..."
+ynh_script_progression --message="Reinstalling borg env..."
 
-ynh_install_app_dependencies $pkg_dependencies
 install_borg_with_pip
 
 #=================================================
 # CREATE SSH USER USED BY BORG
 #=================================================
-ynh_script_progression --message="Creating SSH user used by Borg..."
+ynh_script_progression --message="Making sure SSH user exists with appropriate permissions..."
 
 ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
 
-#=================================================
-# AUTORIZE SSH FOR THIS USER
-#=================================================
-
 home=/home/$ssh_user
-mkdir -p /home/$ssh_user/.ssh
-chmod o=--- /home/$ssh_user
-chown -R $ssh_user:$ssh_user /home/$ssh_user
-touch /home/$ssh_user/.ssh/authorized_keys
+mkdir -p $home/.ssh
+chmod o=--- $home
 extra="--storage-quota $quota"
 if [ "$quota" = "" ]; then
     extra=""
 fi
-echo "command=\"borg serve $extra --restrict-to-repository /home/$ssh_user/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> /home/$ssh_user/.ssh/authorized_keys
+echo "command=\"borg serve $extra --restrict-to-repository $home/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> $home/.ssh/authorized_keys
+chown -R $ssh_user:$ssh_user $home
 
-#=================================================
-# AVOID BACKUP OF BACKUP
-#=================================================
-
+# Tweak to prevent the backup of the backup itself
 touch $home/.nobackup
+
+
+# Actual restore of ...?
 ynh_restore
 
 #=================================================
