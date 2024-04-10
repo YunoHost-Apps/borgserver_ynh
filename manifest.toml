@@ -5,7 +5,7 @@ name = "Borg Server"
 description.en = "Offer backup storage to a friend"
 description.fr = "Offrez un espace de stockage à un⋅e ami⋅e"
 
-version = "1.2.6~ynh1"
+version = "1.2.8~ynh1"
 
 maintainers = ["ljf"]
 
@@ -61,4 +61,16 @@ ram.runtime = "50M"
     [resources.permissions]
 
     [resources.apt]
-    packages = "python3-pip, python3-dev, libacl1-dev, libssl-dev, liblz4-dev, python3-jinja2, python3-setuptools, python3-venv, virtualenv, libfuse-dev, pkg-config"
+    packages = [
+        "python3-pip",
+        "python3-dev",
+        "libacl1-dev",
+        "libssl-dev",
+        "liblz4-dev",
+        "python3-jinja2",
+        "python3-setuptools",
+        "python3-venv",
+        "virtualenv",
+        "libfuse3-dev",
+        "pkg-config",
+    ]
