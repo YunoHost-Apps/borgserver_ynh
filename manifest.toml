@@ -54,7 +54,7 @@ ram.runtime = "50M"
     ask.en = "Indicate the storage quota"
     ask.fr = "Indiquez le quota de stockage"
     type = "string"
-    optionnal = true
+    optional = true
     example = "30G"
 
 [resources]
