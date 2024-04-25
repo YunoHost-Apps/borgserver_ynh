@@ -1,0 +1,76 @@
+packaging_format = 2
+
+id = "borgserver"
+name = "Borg Server"
+description.en = "Offer backup storage to a friend"
+description.fr = "Offrez un espace de stockage à un⋅e ami⋅e"
+
+version = "1.2.8~ynh1"
+
+maintainers = ["ljf"]
+
+[upstream]
+license = "BSD-3-Clause"
+website = "https://www.borgbackup.org/"
+admindoc = "https://borgbackup.readthedocs.io/en/stable/"
+code = "https://github.com/borgbackup/borg"
+
+[integration]
+yunohost = ">= 11.2"
+architectures = "all"
+multi_instance = true
+ldap = "not_relevant"
+sso = "not_relevant"
+disk = "50M"
+ram.build = "50M"
+ram.runtime = "50M"
+
+[install]
+    [install.ssh_user]
+    ask.en = "Indicate the SSH user to create"
+    ask.fr = "Indiquez l'utilisateur SSH à créer"
+    type = "string"
+    example = "john"
+
+    [install.public_key]
+    ask.en = "Indicate the public key given by borg_ynh app"
+    ask.fr = "Indiquez la clé publique donnée par l'app borg_ynh"
+    type = "string"
+
+    [install.alert_delay]
+    ask.en = "After which delay in days should we alert if there are no changes on repo ?"
+    ask.fr = "Après quel délais en jours devons-nous lancer une alerte si il n'y a pas de changement dans le repo ?"
+    type = "string"
+    default = "1"
+
+    [install.alert_mails]
+    ask.en = "Emails to whom send alerts ?"
+    ask.fr = "Emails des personnes à qui envoyer les alertes ?"
+    type = "string"
+    default = "root"
+    example = "camille@example.com,eden@example.com"
+
+    [install.quota]
+    ask.en = "Indicate the storage quota"
+    ask.fr = "Indiquez le quota de stockage"
+    type = "string"
+    optional = true
+    example = "30G"
+
+[resources]
+    [resources.permissions]
+
+    [resources.apt]
+    packages = [
+        "python3-pip",
+        "python3-dev",
+        "libacl1-dev",
+        "libssl-dev",
+        "liblz4-dev",
+        "python3-jinja2",
+        "python3-setuptools",
+        "python3-venv",
+        "virtualenv",
+        "libfuse3-dev",
+        "pkg-config",
+    ]
