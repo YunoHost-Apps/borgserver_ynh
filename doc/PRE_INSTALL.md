@@ -1,0 +1,1 @@
+Note that you should *first* install the other app (`borg_ynh`) on the other machine, and *then* this app (`borgserver_ynh`). After the install of the 'client' app (`borg_ynh`), your friend will be provided with the info, in particular the SSH public key, to be used for this app's installation.
