@@ -16,9 +16,9 @@ Il NE doit PAS être modifié à la main.
 
 ## Vue d’ensemble
 
-Offer backup storage to a friend.
+Setup a storage space to be used for backup using Borg
 
-The main goal of Borg is to provide an efficient and secure way to backup data. The data deduplication technique used makes Borg suitable for daily backups since only changes are stored. The authenticated encryption technique makes it suitable for backups to not fully trusted targets.
+This app is the "server" part, meant to be installed on the machine providing the backup storage. It is designed to work in combination with the [borg 'client' app](https://apps.yunohost.org/app/borg) installed on a diffent machine.
 
 
 **Version incluse :** 1.2.8~ynh1
