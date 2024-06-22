@@ -3,7 +3,7 @@
 请勿手动编辑。
 -->
 
-# YunoHost 的 Borg Server
+# YunoHost 上的 Borg Server
 
 [![集成程度](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![工作状态](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)
 
