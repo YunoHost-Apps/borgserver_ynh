@@ -37,13 +37,15 @@ ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_she
 home=/home/$ssh_user
 mkdir -p $home/.ssh
 chmod o=--- $home
-chown -R $ssh_user:$ssh_user $home
+chmod 700 $home/.ssh
 touch $home/.ssh/authorized_keys
 extra="--storage-quota $quota"
 if [ "$quota" = "" ]; then
     extra=""
 fi
 echo "command=\"borg serve $extra --restrict-to-repository $home/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> $home/.ssh/authorized_keys
+chmod 600 $home/.ssh/authorized_keys
+chown -R $ssh_user:$ssh_user $home
 
 # Tweak to prevent the backup of the backup itself
 touch $home/.nobackup
