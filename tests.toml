@@ -9,3 +9,5 @@ test_format = 1.0
     args.alert_delay = 1
     args.alert_mails = "sam@domain.tld"
     args.quota = "1G"
+
+    test_upgrade_from.4c8c3cabad44a45e7df0d8ddd61a87889a3d4fa3.name = "Before refactoring"
