@@ -22,6 +22,9 @@ ynh_restore_file --origin_path="$install_dir"
 ynh_script_progression --message="Restoring the user and SSH configuration..." --weight=1
 
 ynh_system_user_create --username="$ssh_user" --home_dir="/home/$ssh_user" --use_shell --groups ssh.app
+mkdir -p "/home/$ssh_user"
+chmod 700 "/home/$ssh_user"
+chown "$ssh_user" "/home/$ssh_user"
 
 ynh_restore_file --origin_path="/home/$ssh_user/.ssh"
 ynh_restore_file --origin_path="/home/$ssh_user/.nobackup"

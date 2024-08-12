@@ -33,6 +33,9 @@ install_borg_with_pip
 ynh_script_progression --message="Configuring user and SSH public key for remote connexion..."
 
 ynh_system_user_create --username="$ssh_user" --home_dir="/home/$ssh_user" --use_shell --groups ssh.app
+mkdir -p "/home/$ssh_user"
+chmod 700 "/home/$ssh_user"
+chown "$ssh_user" "/home/$ssh_user"
 
 # Tweak to prevent the backup of the backup itself
 touch "/home/$ssh_user/.nobackup"
