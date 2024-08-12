@@ -12,48 +12,41 @@ source /usr/share/yunohost/helpers
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THIS ARGS
 #=================================================
-# Here is a small hack to avoid multi install CI test to fail due 
+# Here is a small hack to avoid multi install CI test to fail due
 # to same ssh_user provided
 if [[ "${PACKAGE_CHECK_EXEC:-}" = "1" ]] && [[ "$YNH_APP_INSTANCE_NUMBER" != "1" ]] ; then
     ssh_user+="$YNH_APP_INSTANCE_NUMBER"
 fi
 
-ynh_system_user_exists --username=$ssh_user && ynh_die --message="This user already exists"
+ynh_system_user_exists --username="$ssh_user" && ynh_die --message="This user already exists"
 
 #=================================================
-# INSTALL DEPENDENCIES
+# INSTALL BORG
 #=================================================
-ynh_script_progression --message="Installing dependencies..."
+ynh_script_progression --message="Installing Borg..."
 
 install_borg_with_pip
 
 #=================================================
 # AUTORIZE SSH FOR THIS USER
 #=================================================
-ynh_script_progression --message="Configuring SSH public key for remote connexion..."
+ynh_script_progression --message="Configuring user and SSH public key for remote connexion..."
 
-ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
-
-home=/home/$ssh_user
-mkdir -p $home/.ssh
-chmod o=--- $home
-chown -R $ssh_user:$ssh_user $home
-touch $home/.ssh/authorized_keys
-extra="--storage-quota $quota"
-if [ "$quota" = "" ]; then
-    extra=""
-fi
-echo "command=\"borg serve $extra --restrict-to-repository $home/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> $home/.ssh/authorized_keys
+ynh_system_user_create --username="$ssh_user" --home_dir="/home/$ssh_user" --use_shell --groups ssh.app
 
 # Tweak to prevent the backup of the backup itself
-touch $home/.nobackup
+touch "/home/$ssh_user/.nobackup"
+
+create_ssh_config "/home/$ssh_user/.ssh" "/home/$ssh_user/backup"
 
 #=================================================
 # SETUP CRON
 #=================================================
 ynh_script_progression --message="Configuring cron to monitor backup..."
 
-ynh_add_config --template="monitor-backup" --destination="/etc/cron.d/$app"
+ynh_add_config --template="monitor-backup.cron" --destination="/etc/cron.d/$app"
+ynh_add_config --template="monitor-backup.sh" --destination="$install_dir/monitor-backup.sh"
+chmod +x "$install_dir/monitor-backup.sh"
 
 #=================================================
 # END OF SCRIPT
