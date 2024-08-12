@@ -5,7 +5,7 @@ Il NE doit PAS être modifié à la main.
 
 # Borg Server pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)
+[![Niveau d’intégration](https://dash.yunohost.org/integration/borgserver.svg)](https://ci-apps.yunohost.org/ci/apps/borgserver/) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)
 
 [![Installer Borg Server avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=borgserver)
 

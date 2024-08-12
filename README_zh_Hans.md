@@ -5,7 +5,7 @@
 
 # YunoHost 上的 Borg Server
 
-[![集成程度](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![工作状态](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)
+[![集成程度](https://dash.yunohost.org/integration/borgserver.svg)](https://ci-apps.yunohost.org/ci/apps/borgserver/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)
 
 [![使用 YunoHost 安装 Borg Server](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=borgserver)
 

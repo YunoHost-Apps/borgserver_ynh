@@ -5,7 +5,7 @@ EZ editatu eskuz.
 
 # Borg Server YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/borgserver.svg)](https://dash.yunohost.org/appci/app/borgserver) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)
+[![Integrazio maila](https://dash.yunohost.org/integration/borgserver.svg)](https://ci-apps.yunohost.org/ci/apps/borgserver/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/borgserver.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/borgserver.maintain.svg)
 
 [![Instalatu Borg Server YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=borgserver)
 
