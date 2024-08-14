@@ -7,7 +7,7 @@ name = "Borg Server"
 description.en = "Offer backup storage to a friend"
 description.fr = "Offrez un espace de stockage à un⋅e ami⋅e"
 
-version = "1.2.8~ynh2"
+version = "1.2.8~ynh3"
 
 maintainers = ["ljf"]
 
