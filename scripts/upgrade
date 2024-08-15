@@ -10,23 +10,24 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# CHECK IF AN UPGRADE IS NEEDED
-#=================================================
-
-ynh_check_app_version_changed
-
-#=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
 ynh_script_progression --message="Ensuring downward compatibility..."
 
+# Remove legacy stuff
 if [ -f "/etc/apt/sources.list.d/$app-stretch-backports.list" ]; then
-    rm -f /etc/apt/sources.list.d/$app-stretch-backports.list
-    install_borg_with_pip
+    ynh_secure_remove "/etc/apt/sources.list.d/$app-stretch-backports.list"
 fi
 
 if [ -f "/etc/yunohost/hooks.d/backup/17-data_home" ]; then
-    ynh_secure_remove /etc/yunohost/hooks.d/backup/17-data_home
+    ynh_secure_remove "/etc/yunohost/hooks.d/backup/17-data_home"
+fi
+
+# Clear legacy stuff
+if [ -d /opt/borg-env ]; then
+    ynh_secure_remove --file="/opt/borg-env"
+    ynh_secure_remove --file="/usr/local/bin/borg"
+    ynh_secure_remove --file="/usr/local/bin/backup-with-borg"
 fi
 
 # Fix broken value ssh_user that mistakenly got replaced by the public key in previous versions...
@@ -34,30 +35,23 @@ fi
 if echo "$ssh_user" | grep -q ' '; then
     ssh_user=$(grep "$ssh_user" /home/*/.ssh/authorized_keys | grep borg | cut -d/ -f3)
     [ -n "$ssh_user" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
-    ynh_app_setting_set --app=$app --key=ssh_user --value="$ssh_user"
+    ynh_app_setting_set --app="$app" --key=ssh_user --value="$ssh_user"
 fi
 
 if echo "$public_key" | grep -q -v ' '; then
-    ynh_app_setting_set --app=$app --key=public_key --value="$(grep -Po 'no-user-rc \K.*$' /home/$ssh_user/.ssh/authorized_keys)"
+    ynh_app_setting_set --app="$app" --key=public_key --value="$(grep -Po 'no-user-rc \K.*$' "/home/$ssh_user/.ssh/authorized_keys")"
 fi
 
 # Alert delay and alert mail missing
 if [ -z "${alert_delay:-}" ]; then
-	ynh_app_setting_set --app=$app --key=alert_delay --value=1
-	ynh_app_setting_set --app=$app --key=alert_mails --value="root"
-fi
-
-# Reinstall borg if debian change of major version
-if [ ! -f "/opt/borg-env/$(ynh_get_debian_release)" ] ; then
-    ynh_secure_remove /opt/borg-env
+    ynh_app_setting_set --app="$app" --key=alert_delay --value="1"
+    ynh_app_setting_set --app="$app" --key=alert_mails --value="root"
 fi
 
 #=================================================
-# SPECIFIC UPGRADE
+# UPGRADE BORG
 #=================================================
-# Upgrade borgbackup
-#=================================================
-ynh_script_progression --message="Upgrading borgbackup..." --weight=1
+ynh_script_progression --message="Upgrading Borg..." --weight=1
 
 install_borg_with_pip
 
@@ -66,27 +60,24 @@ install_borg_with_pip
 #=================================================
 ynh_script_progression --message="Making sure SSH user exists with appropriate permissions..."
 
-ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
-
-home=/home/$ssh_user
-mkdir -p $home/.ssh
-chmod o=--- $home
-extra="--storage-quota $quota"
-if [ "$quota" = "" ]; then
-    extra=""
-fi
-echo "command=\"borg serve $extra --restrict-to-repository $home/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> $home/.ssh/authorized_keys
-chown -R $ssh_user:$ssh_user $home
+ynh_system_user_create --username="$ssh_user" --home_dir="/home/$ssh_user" --use_shell --groups ssh.app
+mkdir -p "/home/$ssh_user"
+chmod 700 "/home/$ssh_user"
+chown "$ssh_user" "/home/$ssh_user"
 
 # Tweak to prevent the backup of the backup itself
-touch $home/.nobackup
+touch "/home/$ssh_user/.nobackup"
+
+create_ssh_config "/home/$ssh_user/.ssh" "/home/$ssh_user/backup"
 
 #=================================================
 # SETUP CRON
 #=================================================
 ynh_script_progression --message="Configuring cron to monitor backup..."
 
-ynh_add_config --template="monitor-backup" --destination="/etc/cron.d/$app"
+ynh_add_config --template="monitor-backup.cron" --destination="/etc/cron.d/$app"
+ynh_add_config --template="monitor-backup.sh" --destination="$install_dir/monitor-backup.sh"
+chmod +x "$install_dir/monitor-backup.sh"
 
 #=================================================
 # END OF SCRIPT

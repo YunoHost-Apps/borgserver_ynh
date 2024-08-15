@@ -1,0 +1,2 @@
+# Monitor __SSH_USER__ backup every day
+0 9,20 * * * root __INSTALL_DIR__/monitor-backup.sh

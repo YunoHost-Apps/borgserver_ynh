@@ -1,23 +1,45 @@
 #!/bin/bash
 
-BORG_VERSION=1.2.8
+#=================================================
+# COMMON VARIABLES
+#=================================================
 
-# Install borg with pip if borg is not here
-install_borg_with_pip () {
-    if [ -d /opt/borg-env ]; then
-        /opt/borg-env/bin/python /opt/borg-env/bin/pip list | grep "borgbackup *$BORG_VERSION" || ynh_secure_remove /opt/borg-env
-    fi
-    if [ ! -d /opt/borg-env ]; then
-        python3 -m venv /opt/borg-env
-        /opt/borg-env/bin/python /opt/borg-env/bin/pip install pip -U
-        /opt/borg-env/bin/python /opt/borg-env/bin/pip install setuptools -U
-        /opt/borg-env/bin/python /opt/borg-env/bin/pip install wheel -U
-        ynh_print_info --message="Installing/compiling borg, this may take some time..."
-        /opt/borg-env/bin/python /opt/borg-env/bin/pip install borgbackup[pyfuse3]==$BORG_VERSION
-        echo "#!/bin/bash
-    /opt/borg-env/bin/python /opt/borg-env/bin/borg \"\$@\"" > /usr/local/bin/borg
-        touch "/opt/borg-env/$(ynh_get_debian_release)"
-    fi
-    # We need this to be executable by other borg apps
-    chmod a+x /usr/local/bin/borg
+#=================================================
+# PERSONAL HELPERS
+#=================================================
+
+install_borg_with_pip() {
+    ynh_exec_as "$app" python3 -m venv --upgrade "$install_dir/venv"
+    venvpy="$install_dir/venv/bin/python3"
+
+    ynh_exec_as "$app" "$venvpy" -m pip install --upgrade setuptools wheel
+
+    BORG_VERSION=$(ynh_app_upstream_version)
+    ynh_exec_as "$app" "$venvpy" -m pip install borgbackup[pyfuse3]=="$BORG_VERSION"
 }
+
+create_ssh_config() {
+    ssh_dir=$1
+    repository=$2
+    extra=""
+    if [[ -n "$quota" ]]; then
+        extra="--storage-quota $quota"
+    fi
+    command="borg serve $extra --restrict-to-repository $repository"
+    ssh_opts="command=\"$command\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc"
+
+    mkdir -p "$ssh_dir"
+    touch "$ssh_dir/authorized_keys"
+    echo "$ssh_opts $public_key" >> "$ssh_dir/authorized_keys"
+
+    chown -R "$ssh_user:$ssh_user" "$ssh_dir"
+    chmod -R u=rwX,go=--- "$ssh_dir"
+}
+
+#=================================================
+# EXPERIMENTAL HELPERS
+#=================================================
+
+#=================================================
+# FUTURE OFFICIAL HELPERS
+#=================================================

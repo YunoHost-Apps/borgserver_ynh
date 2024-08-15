@@ -1,16 +1,38 @@
 #!/bin/bash
 
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source /usr/share/yunohost/helpers
 
 #=================================================
 # DECLARE DATA AND CONF FILES TO BACKUP
 #=================================================
 ynh_print_info --message="Declaring files to be backed up..."
-ynh_backup "/home/$ssh_user/.ssh"
-ynh_backup "/home/$ssh_user/.nobackup"
-ynh_backup "/etc/cron.d/$app"
+
+#=================================================
+# BACKUP THE APP MAIN DIR
+#=================================================
+
+ynh_backup --src_path="$install_dir"
+
+#=================================================
+# BACKUP THE DATA DIR
+#=================================================
+
+ynh_backup --src_path="/home/$ssh_user/.ssh"
+ynh_backup --src_path="/home/$ssh_user/.nobackup"
 
 ynh_print_info --message="Borg backup repo in /home/$ssh_user/ won't be backup to avoid backup of backup loop issue."
+
+#=================================================
+# BACKUP VARIOUS FILES
+#=================================================
+
+ynh_backup --src_path="/etc/cron.d/$app"
 
 #=================================================
 # END OF SCRIPT

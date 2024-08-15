@@ -1,3 +1,5 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
 packaging_format = 2
 
 id = "borgserver"
@@ -5,7 +7,7 @@ name = "Borg Server"
 description.en = "Offer backup storage to a friend"
 description.fr = "Offrez un espace de stockage à un⋅e ami⋅e"
 
-version = "1.2.8~ynh1"
+version = "1.2.8~ynh3"
 
 maintainers = ["ljf"]
 
@@ -67,19 +69,23 @@ ram.runtime = "50M"
     autoupdate.strategy = "latest_github_release"
     autoupdate.upstream = "https://github.com/borgbackup/borg"
 
+    [resources.system_user]
+    # Not really useful, but required for install_dir
+
+    [resources.install_dir]
+
     [resources.permissions]
 
     [resources.apt]
     packages = [
         "python3-pip",
         "python3-dev",
-        "libacl1-dev",
-        "libssl-dev",
-        "liblz4-dev",
         "python3-jinja2",
         "python3-setuptools",
         "python3-venv",
-        "virtualenv",
+        "libacl1-dev",
+        "libssl-dev",
+        "liblz4-dev",
         "libfuse3-dev",
         "pkg-config",
     ]

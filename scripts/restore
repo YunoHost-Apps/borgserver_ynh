@@ -10,35 +10,31 @@ source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# INSTALL DEPENDENCIES
+# RESTORE THE APP MAIN DIR
 #=================================================
-ynh_script_progression --message="Reinstalling borg env..."
+ynh_script_progression --message="Restoring the app main directory..." --weight=1
 
-install_borg_with_pip
+ynh_restore_file --origin_path="$install_dir"
 
 #=================================================
-# CREATE SSH USER USED BY BORG
+# RESTORE THE DATA DIRECTORY
 #=================================================
-ynh_script_progression --message="Making sure SSH user exists with appropriate permissions..."
+ynh_script_progression --message="Restoring the user and SSH configuration..." --weight=1
 
-ynh_system_user_create --username=$ssh_user --home_dir=/home/$ssh_user --use_shell --groups ssh.app
+ynh_system_user_create --username="$ssh_user" --home_dir="/home/$ssh_user" --use_shell --groups ssh.app
+mkdir -p "/home/$ssh_user"
+chmod 700 "/home/$ssh_user"
+chown "$ssh_user" "/home/$ssh_user"
 
-home=/home/$ssh_user
-mkdir -p $home/.ssh
-chmod o=--- $home
-extra="--storage-quota $quota"
-if [ "$quota" = "" ]; then
-    extra=""
-fi
-echo "command=\"borg serve $extra --restrict-to-repository $home/backup\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc $public_key" >> $home/.ssh/authorized_keys
-chown -R $ssh_user:$ssh_user $home
+ynh_restore_file --origin_path="/home/$ssh_user/.ssh"
+ynh_restore_file --origin_path="/home/$ssh_user/.nobackup"
 
-# Tweak to prevent the backup of the backup itself
-touch $home/.nobackup
+#=================================================
+# RESTORE SYSTEM CONFIGURATIONS
+#=================================================
+ynh_script_progression --message="Restoring system configurations related to $app..." --weight=1
 
-
-# Actual restore of ...?
-ynh_restore
+ynh_restore_file --origin_path="/etc/cron.d/$app"
 
 #=================================================
 # END OF SCRIPT
