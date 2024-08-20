@@ -21,7 +21,7 @@ Setup a storage space to be used for backup using Borg
 This app is the "server" part, meant to be installed on the machine providing the backup storage. It is designed to work in combination with the [borg 'client' app](https://apps.yunohost.org/app/borg) installed on a diffent machine.
 
 
-**Version incluse :** 1.2.8~ynh5
+**Version incluse :** 1.4.0~ynh1
 ## Documentations et ressources
 
 - Site officiel de l’app : <https://www.borgbackup.org/>
