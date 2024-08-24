@@ -29,7 +29,7 @@ create_ssh_config() {
     if [[ -n "$quota" ]]; then
         extra="--storage-quota $quota"
     fi
-    command="$install_dir/venv/bin/borg serve $extra --restrict-to-repository $repository"
+    command="PATH=$install_dir/venv/bin/:$PATH borg serve $extra --restrict-to-repository $repository"
     ssh_opts="command=\"$command\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc"
 
     mkdir -p "$ssh_dir"
