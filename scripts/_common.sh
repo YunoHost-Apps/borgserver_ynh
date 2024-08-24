@@ -34,7 +34,7 @@ create_ssh_config() {
 
     mkdir -p "$ssh_dir"
     touch "$ssh_dir/authorized_keys"
-    echo "$ssh_opts $public_key" >> "$ssh_dir/authorized_keys"
+    echo "$ssh_opts $public_key" > "$ssh_dir/authorized_keys"
 
     chown -R "$ssh_user:$ssh_user" "$ssh_dir"
     chmod -R u=rwX,go=--- "$ssh_dir"
