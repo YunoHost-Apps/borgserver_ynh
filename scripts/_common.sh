@@ -18,7 +18,7 @@ install_borg_with_pip() {
     ynh_exec_as "$app" "$venvpy" -m pip install borgbackup[pyfuse3]=="$BORG_VERSION"
 
     # Make venv accessible for every user
-    setfacl --recursive --modify g:$ssh_user:rwX,d:g:$ssh_user:rwX
+    setfacl --recursive --modify g:$ssh_user:rwX,d:g:$ssh_user:rwX "$install_dir"
 }
 
 create_ssh_config() {
