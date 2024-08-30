@@ -49,13 +49,6 @@ if [ -z "${alert_delay:-}" ]; then
 fi
 
 #=================================================
-# UPGRADE BORG
-#=================================================
-ynh_script_progression --message="Upgrading Borg..." --weight=1
-
-install_borg_with_pip
-
-#=================================================
 # AUTORIZE SSH FOR THIS USER
 #=================================================
 ynh_script_progression --message="Making sure SSH user exists with appropriate permissions..."
@@ -69,6 +62,13 @@ chown "$ssh_user" "/home/$ssh_user"
 touch "/home/$ssh_user/.nobackup"
 
 create_ssh_config "/home/$ssh_user/.ssh" "/home/$ssh_user/backup"
+
+#=================================================
+# UPGRADE BORG
+#=================================================
+ynh_script_progression --message="Upgrading Borg..." --weight=1
+
+install_borg_with_pip
 
 #=================================================
 # SETUP CRON
