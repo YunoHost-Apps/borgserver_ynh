@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -21,10 +15,10 @@ ynh_system_user_delete --username="$ssh_user"
 # REMOVE CRON FILES
 #=================================================
 
-ynh_secure_remove "/etc/cron.d/$app"
+ynh_safe_rm "/etc/cron.d/$app"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Removal of $app completed" --last
+ynh_script_progression "Removal of $app completed"
