@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -27,10 +21,6 @@ ynh_backup --src_path="/home/$ssh_user/.ssh"
 ynh_backup --src_path="/home/$ssh_user/.nobackup"
 
 ynh_print_info --message="Borg backup repo in /home/$ssh_user/ won't be backup to avoid backup of backup loop issue."
-
-#=================================================
-# BACKUP VARIOUS FILES
-#=================================================
 
 ynh_backup --src_path="/etc/cron.d/$app"
 
