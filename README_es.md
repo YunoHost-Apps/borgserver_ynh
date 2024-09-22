@@ -32,7 +32,7 @@ This app is the "server" part, meant to be installed on the machine providing th
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/borgserver_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/borgserver_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 
