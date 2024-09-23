@@ -15,13 +15,6 @@ fi
 ynh_system_user_exists --username="$ssh_user" && ynh_die --message="This user already exists"
 
 #=================================================
-# INSTALL BORG
-#=================================================
-ynh_script_progression --message="Installing Borg..."
-
-install_borg_with_pip
-
-#=================================================
 # AUTORIZE SSH FOR THIS USER
 #=================================================
 ynh_script_progression --message="Configuring user and SSH public key for remote connexion..."
@@ -35,6 +28,13 @@ chown "$ssh_user" "/home/$ssh_user"
 touch "/home/$ssh_user/.nobackup"
 
 create_ssh_config "/home/$ssh_user/.ssh" "/home/$ssh_user/backup"
+
+#=================================================
+# INSTALL BORG
+#=================================================
+ynh_script_progression --message="Installing Borg..."
+
+install_borg_with_pip
 
 #=================================================
 # SETUP CRON
