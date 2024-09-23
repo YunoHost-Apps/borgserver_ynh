@@ -7,7 +7,7 @@ name = "Borg Server"
 description.en = "Offer backup storage to a friend"
 description.fr = "Offrez un espace de stockage à un⋅e ami⋅e"
 
-version = "1.2.8~ynh5"
+version = "1.4.0~ynh1"
 
 maintainers = ["ljf"]
 
@@ -61,8 +61,8 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
-    url = "https://github.com/borgbackup/borg/archive/refs/tags/1.2.8.tar.gz"
-    sha256 = "0b7d124191372dda45274fbf9e393b066992fcfef05fea63714f7c5c1843fc7c"
+    url = "https://github.com/borgbackup/borg/archive/refs/tags/1.4.0.tar.gz"
+    sha256 = "88d0e37bee67398ee12414c18d67502a5dbf06b1a72fbffe2e20fcd5736e7320"
     # Only here to bump the package version
     prefetch = false
 
@@ -78,14 +78,15 @@ ram.runtime = "50M"
 
     [resources.apt]
     packages = [
-        "python3-pip",
+        "python3",
         "python3-dev",
-        "python3-jinja2",
-        "python3-setuptools",
+        "python3-pip",
         "python3-venv",
         "libacl1-dev",
         "libssl-dev",
         "liblz4-dev",
+        "libzstd-dev",
+        "libxxhash-dev",
         "libfuse3-dev",
         "pkg-config",
     ]

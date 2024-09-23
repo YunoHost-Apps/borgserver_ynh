@@ -1,10 +1,6 @@
 #!/bin/bash
 
 #=================================================
-# COMMON VARIABLES
-#=================================================
-
-#=================================================
 # PERSONAL HELPERS
 #=================================================
 
@@ -29,21 +25,13 @@ create_ssh_config() {
     if [[ -n "$quota" ]]; then
         extra="--storage-quota $quota"
     fi
-    command="$install_dir/venv/bin/borg serve $extra --restrict-to-repository $repository"
+    command="PATH=$install_dir/venv/bin/:$PATH borg serve $extra --restrict-to-repository $repository"
     ssh_opts="command=\"$command\",no-pty,no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-user-rc"
 
     mkdir -p "$ssh_dir"
     touch "$ssh_dir/authorized_keys"
-    echo "$ssh_opts $public_key" >> "$ssh_dir/authorized_keys"
+    echo "$ssh_opts $public_key" > "$ssh_dir/authorized_keys"
 
     chown -R "$ssh_user:$ssh_user" "$ssh_dir"
     chmod -R u=rwX,go=--- "$ssh_dir"
 }
-
-#=================================================
-# EXPERIMENTAL HELPERS
-#=================================================
-
-#=================================================
-# FUTURE OFFICIAL HELPERS
-#=================================================
