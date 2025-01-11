@@ -3,5 +3,5 @@ If you plan to use borgserver to backup another yunohost machine, you should *fi
 
 ## Backuping another _non-yunohost_ machine
 It's also possible to install `borgserver` to provide backup storage to a friend's computer that isn't running yunohost and its `borg_ynh` app. Your friend will need to generate an SSH key and give it to you before installing this app (`borgserver_ynh`).
-1. On the friend's computer generate an SSH key (example: ssh-keygen -f borg_key)
-2. Copy the content of borg_key.pub into the SSH key field below
+1. On the friend's computer generate an SSH key (example: `ssh-keygen -f borg_key`)
+2. Open the `borg_key.pub` file and copy its content into the SSH key field below
