@@ -65,6 +65,8 @@ ram.runtime = "50M"
     type = "string"
     optional = true
     example = "30G"
+    help.en = "Examples: '30G' for 30 gigabytes or '2T' for 2 terabytes."
+    help.fr = "Exemples: '30G' for 30 gigaoctets or '2T' for 2 teraoctets."
 
 [resources]
     [resources.sources.main]
