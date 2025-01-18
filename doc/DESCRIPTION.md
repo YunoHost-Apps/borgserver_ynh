@@ -1,6 +1,15 @@
 Setup a storage space to be used for backup using Borg
 
-This app is the "server" part, meant to be installed on the machine providing the backup storage. It is designed to work in combination with the [borg 'client' app](https://apps.yunohost.org/app/borg) installed on a different machine. It can also be used to provide backup storage to another (non-yunohost) computer that is running a Borg client (ex: Pika Backup)
+This app is the "server" part, meant to be installed on the machine providing the backup storage. It is designed either to work in combination with the [borg 'client' app](https://apps.yunohost.org/app/borg) installed on a different machine or to provide backup storage to another (non-yunohost) computer that is running a Borg client (ex: Pika Backup).
+
+### After installation : How to connect to your Borg server
+
+**Repository URL:** `ssh://<borg_user>@<ip adresse or url>/~/backup` 
+Example: `ssh://alice@192.168.0.101/~/backup`
+
+Note: You *cannot* change the backup location `~/backup`. If you want to backup somewhere else, see instructions below.
+
+
 
 ### Changing parameters after install
 
@@ -24,3 +33,16 @@ If you know what you're doing and you're feeling confident, the parameters affec
 
 - `/home/BORG_USERNAME/.ssh/authorized_key`
 - `/etc/yunohost/apps/BORG_APP_NAME/settings.yml`
+
+#### Manually changing the repository location
+
+It's not possible to change the backup location `~/backup`. 
+
+If you want to backup somewhere else, use a symbolic link. Make sure that the destination is readable and writable by the borg user.
+
+```bash
+ln -s /path/to/new/destination /home/borg-user/backup
+
+chown borg-user:borg-user /path/to/new/destination
+```
+
