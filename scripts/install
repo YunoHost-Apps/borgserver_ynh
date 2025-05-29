@@ -43,6 +43,7 @@ ynh_script_progression "Configuring cron to monitor backup..."
 
 ynh_config_add --template="monitor-backup.cron" --destination="/etc/cron.d/$app"
 ynh_config_add --template="monitor-backup.sh" --destination="$install_dir/monitor-backup.sh"
+
 chmod +x "$install_dir/monitor-backup.sh"
 
 #=================================================
