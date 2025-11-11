@@ -14,7 +14,7 @@ install_borg_with_pip() {
     ynh_exec_as_app "$venvpy" -m pip install borgbackup[pyfuse3]=="$BORG_VERSION"
 
     # Make venv accessible for every user
-    chmod a+rX "$install_dir"
+    chmod o-rwx "$install_dir"
     chmod a+rX -R "$install_dir/venv"
 }
 
