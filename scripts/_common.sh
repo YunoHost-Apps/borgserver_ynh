@@ -14,8 +14,8 @@ install_borg_with_pip() {
     ynh_exec_as_app "$venvpy" -m pip install borgbackup[pyfuse3]=="$BORG_VERSION"
 
     # Make venv accessible for every user
-    #REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod a+rX "$install_dir"
-    #REMOVEME? Assuming the file is setup using ynh_config_add, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod a+rX -R "$install_dir/venv"
+    chmod a+rX "$install_dir"
+    chmod a+rX -R "$install_dir/venv"
 }
 
 create_ssh_config() {
