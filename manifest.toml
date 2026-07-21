@@ -7,7 +7,7 @@ name = "Borg Server"
 description.en = "Offer backup storage to a friend"
 description.fr = "Offrez un espace de stockage à un⋅e ami⋅e"
 
-version = "1.4.3~ynh1"
+version = "1.4.5~ynh1"
 
 maintainers = ["ljf"]
 
@@ -61,8 +61,8 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
-    url = "https://github.com/borgbackup/borg/archive/refs/tags/1.4.3.tar.gz"
-    sha256 = "afd38c37c006d5e9d02fb5962d512050d00876a9899807cda71af648bf82f010"
+    url = "https://github.com/borgbackup/borg/archive/refs/tags/1.4.5.tar.gz"
+    sha256 = "ce7aa6ec25029a2878b660d7e38f2720dc16fcf2b5c80780d4bf7494d4b29c04"
     # Only here to bump the package version
     prefetch = false
 
