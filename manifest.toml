@@ -33,11 +33,16 @@ ram.runtime = "50M"
     ask.fr = "Indiquez l'utilisateur SSH à créer"
     type = "string"
     example = "john"
+    help.en = "Lowercase only. This user must not already exist."
+    help.fr = "Lettres minuscules seulement. Ce nom d'utilisateur ne doit pas déjà exister."
 
     [install.public_key]
     ask.en = "Indicate the public key given by borg_ynh app"
     ask.fr = "Indiquez la clé publique donnée par l'app borg_ynh"
     type = "string"
+    example = "ssh-ed25519 ABCDC3NzaC1lZDI1NTE5AAAAIIZauo7veP9fMmEseDzzdcNhSG2b1CB703RhFw+nUwP0 user@computer"
+    help.en = "Careful: This is not the same as the encryption key used by the borg client. If you're not using the borg_ynh app, generate your own ssh key and copy the public key here."
+    help.fr = "Attention: Ce n'est pas la clé de cryptage utilisée par le client borg. Si vous n'utilisez pas l'app borg_ynh, générez votre clé SSH et copiez la clé publique ici."
 
     [install.alert_delay]
     ask.en = "After which delay in days should we alert if there are no changes on repo ?"
@@ -51,6 +56,8 @@ ram.runtime = "50M"
     type = "string"
     default = "root"
     example = "camille@example.com,eden@example.com"
+    help.en = "Use commas to separate multiple addresses. No spaces."
+    help.fr = "Séparez plusieurs adresses par des virgules, sans espaces."
 
     [install.quota]
     ask.en = "Indicate the storage quota"
@@ -58,6 +65,8 @@ ram.runtime = "50M"
     type = "string"
     optional = true
     example = "30G"
+    help.en = "Examples: '30G' for 30 gigabytes or '2T' for 2 terabytes."
+    help.fr = "Exemples: '30G' for 30 gigaoctets or '2T' for 2 teraoctets."
 
 [resources]
     [resources.sources.main]
