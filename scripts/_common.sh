@@ -1,20 +1,20 @@
 #!/bin/bash
 
 #=================================================
-# PERSONAL HELPERS
+# COMMON VARIABLES AND CUSTOM HELPERS
 #=================================================
 
 install_borg_with_pip() {
-    ynh_exec_as "$app" python3 -m venv --upgrade "$install_dir/venv"
+    ynh_exec_as_app python3 -m venv --upgrade "$install_dir/venv"
     venvpy="$install_dir/venv/bin/python3"
 
-    ynh_exec_as "$app" "$venvpy" -m pip install --upgrade setuptools wheel
+    ynh_exec_as_app "$venvpy" -m pip install --upgrade setuptools wheel
 
     BORG_VERSION=$(ynh_app_upstream_version)
-    ynh_exec_as "$app" "$venvpy" -m pip install borgbackup[pyfuse3]=="$BORG_VERSION"
+    ynh_exec_as_app "$venvpy" -m pip install borgbackup[pyfuse3]=="$BORG_VERSION"
 
     # Make venv accessible for every user
-    chmod a+rX "$install_dir"
+    chmod o-rwx "$install_dir"
     chmod a+rX -R "$install_dir/venv"
 }
 
