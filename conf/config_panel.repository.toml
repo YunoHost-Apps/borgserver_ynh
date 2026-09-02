@@ -1,0 +1,45 @@
+
+
+# START___REPOSITORY__
+[configure.__REPOSITORY__]
+    name.en = "'__REPOSITORY__' repository"
+    name.fr = "Dépôt '__REPOSITORY__'"
+    collapsed = true
+
+[configure.__REPOSITORY__.__REPOSITORY___public_key]
+    ask.en = "SSH access public key"
+    ask.fr = "Clé publique d'accès SSH"
+    type = "string"
+    optional = true
+    example = "ssh-ed25519 ABCDC3NzaC1lZDI1NTE5AAAAIIZauo7veP9fMmEseDzzdcNhSG2b1CB703RhFw+nUwP0 user@computer"
+    help.en = "Careful: This is not the same as the encryption key used by the borg client"
+    help.fr = "Attention: Ce n'est pas la clé de cryptage utilisée par le client borg."
+    
+[configure.__REPOSITORY__.__REPOSITORY___quota]
+    ask.en = "Storage quota"
+    ask.fr = "Quota de stockage"
+    type = "string"
+    optional = true
+    example = "30G"
+    help.en = "Leave empty for unlimited quota or specify value and unit('G' for gigabytes, 'T' for terabytes, ...). At least 10M must be allocated."
+    help.fr = "Laissez vide pour ne pas mettre de quota ou spécifiez une valeur et son unité ('G' pour gigaoctets, 'T' pour teraoctets, ...). Au moins 10M doivent être alloués."
+
+[configure.__REPOSITORY__.__REPOSITORY___alert_delay]
+    ask.en = "Alert notifications delay"
+    ask.fr = "Délai des notifications d'alerte"
+    type = "string"
+    optional = true
+    help.en = "If left empty, no alert will be sent.<br/> For more informations, see \"Alert notifications\" in documentation below."
+    help.fr = "Laissez ce champ vide pour désactiver les alertes.<br/> Pour plus d'informations, voir \"Notifications d'alerte\" dans la documentation ci-dessous."
+
+[configure.__REPOSITORY__.__REPOSITORY___alert_mails]
+    ask.en = "Alert notifications recipients"
+    ask.fr = "Déstinataires des notifications d'alerte"
+    type = "string"
+    optional = true
+    visible = "__REPOSITORY___alert_delay"
+    example = "camille@example.com,root,eden@example.com"
+    help.en = "Use commas to separate multiple addresses. No spaces."
+    help.fr = "Séparez plusieures adresses par des virgules, sans espaces."
+    
+# END___REPOSITORY__
