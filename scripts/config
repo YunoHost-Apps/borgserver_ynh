@@ -1,0 +1,104 @@
+#!/bin/bash
+# In simple cases, you don't need a config script.
+
+# With a simple config_panel.toml, you can write in the app settings, in the
+# upstream config file or replace complete files (logo ...) and restart services.
+
+# The config scripts allows you to go further, to handle specific cases
+# (validation of several interdependent fields, specific getter/setter for a value,
+# display dynamic informations or choices, pre-loading of config type .cube... ).
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# CUSTOM FUNCTIONS
+#=================================================
+
+validate_repository() {
+    public_key="${!1}"
+    quota="${!2}"
+    alert_delay="${!3}"
+    alert_mails="${!4}"
+
+    if [[ "$quota" != "" && ! "$quota" =~ ^[0-9]+[K|M|G|T|P]$ ]]; then
+        ynh_print_warn "<b>[EN]</b> Quotas must be written as number followed by unit (K for kilobyte, M for megabyte, G for gigabyte, T for terabyte and P for petabyte).
+        <b>[FR]</b> Le quota de stockage doit être un nombre suivi d'une unité (K pour kilooctet, M pour mégaoctet, G pour gigaoctet, T pour téraoctet et P pour pétaoctet)."
+        exit 0
+    fi
+    if [[ "$public_key" != "" && ! "$public_key" =~ ^ssh-(ed25519|rsa|dss|ecdsa)\ AAAA[0-9A-Za-z+\/]+[=]{0,3}(\ .*)?$ ]]; then
+        ynh_print_warn "<b>[EN]</b> Given public key format isn't valid.
+        <b>[FR]</b> La clé publique n'est pas valide."
+        exit 0
+    fi
+    if [[ "$alert_delay" != "" && ! "$alert_delay" =~ ^[0-9]+$ ]]; then
+        ynh_print_warn "<b>[EN]</b> Alerts delay must be a number representing days. 
+        <b>[FR]</b> Le délai pour les alertes doit être un nombre représentant une quantité de jours."
+        exit 0
+    fi
+    if [[ "$alert_delay" != "" ]]; then
+        usernames=$(ynh_user_list)
+        for recipient in ${alert_mails//,/ }; do
+            regex=\\b$recipient\\b
+            if [[ ! ("$usernames" =~ $regex || "$recipient" =~ ^[\.a-zA-Z0-9_-]+[@][a-zA-Z0-9_-]*[\.]*[a-zA-Z0-9_]+[\.]+[a-zA-Z0-9_]+[^\·]$) ]]; then
+                ynh_print_warn "<b>[EN]</b> Alerts' recipients can either be a local user or a valid email address.
+                <b>[FR]</b> Les destinataires des alertes peuvent être des utilisateurs locaux ou des adresses email valides."
+                exit 0
+            fi
+        done
+    fi
+}
+
+set_repository_default_values() {
+    ynh_app_setting_set --key="${repository_to_add}_public_key" --value=""
+    ynh_app_setting_set --key="${repository_to_add}_quota" --value=""
+    ynh_app_setting_set --key="${repository_to_add}_alert_delay" --value=""
+    ynh_app_setting_set --key="${repository_to_add}_alert_mails" --value=""
+}
+
+#=================================================
+# OVERWRITTEN YUNOHOST FUNCTIONS
+#=================================================
+
+get__repository_to_delete() {
+    repository_list=$(get_repositories_list "$data_dir")
+    if [[ -z "$repository_list" ]]; then
+        echo "choices: []"
+    else
+        echo "choices: [${repository_list// /,}]"
+    fi
+    echo "value: null"
+}
+
+run__add_repository() {
+    ynh_print_info "Adding repository '$repository_to_add'..."
+    create_repository
+    set_repository_default_values
+}
+
+run__delete_repository() {
+    delete_repository
+}
+
+ynh_app_config_validate() {
+    _ynh_app_config_validate
+
+    for repository in $(get_repositories_list "$data_dir"); do
+        if grep -wq "# START_$repository" "/etc/yunohost/apps/$app/config_panel.toml"; then
+            validate_repository "${repository}_public_key" "${repository}_quota" "${repository}_alert_delay" "${repository}_alert_mails"
+        fi
+    done
+}
+
+ynh_app_config_apply() {
+    _ynh_app_config_apply
+
+    for repository in $(get_repositories_list "$data_dir"); do
+        if grep -wq "# START_$repository" "/etc/yunohost/apps/$app/config_panel.toml"; then
+            configure_repository "$repository" "${repository}_public_key" "${repository}_quota"
+        fi
+    done
+}
+
+#=================================================
+ynh_app_config_run $1

@@ -1,0 +1,52 @@
+version = "1.0"
+
+[manage]
+    name.en = "Manage repositoriess"
+    name.fr = "Gérer les dépôts"
+
+[manage.repositories]
+
+[manage.repositories.repository_to_add]
+    ask.en = "Repository name"
+    ask.fr = "Nom du dépôt à créer"
+    type = "string"
+    bind = "null"
+    pattern.regexp = '^[a-zA-Z0-9_]+$'
+    example = "alice_repository"
+    help.en = "Repository names can only contain following characters: a to z, A to Z, 0 to 9 and _"
+    help.fr = "Les noms de dépôts doivent uniquement contenir les charactères suivants : a à z, A à Z, 0 à 9 et _. De plus, les accents ne sont pas autorisés."
+
+[manage.repositories.add_repository]
+    ask.en = "Create"
+    ask.fr = "Créer"
+    type = "button"
+    icon = "check"
+    style = "success"
+    enabled = "repository_to_add"
+
+[manage.repositories.repository_to_delete]
+    ask.en = "Select repository to delete"
+    ask.fr = "Sélectionnez le dépôt à supprimer"
+    type = "select"
+    bind = "null"
+    help.en = "Repositories listed here correspond to current borg installation managed reporitories and previously existing reporitories.<br/> See \"Manage pre-installation existing repositories\" in documentation below."
+    help.fr = "Les dépôts affichés sont ceux gérés par l'installation courrante de l'application et ceux des installations précédentes.<br/> Voir \"Gérer les dépôts existants avant l'installation\" dans la documentation ci-dessous."
+
+[manage.repositories.delete_aknowledgement]
+    ask.en = "Warning! By deleting this repository, every backup inside of it will be permanently erased. Do you wish to continue?"
+    ask.fr = "Attention ! En supprimant ce dépôt, toutes les sauvegardes qu'il contient seront détruite définitivement. Voulez-vous continuer ?"
+    type = "boolean"
+    bind = "null"
+    visible = "repository_to_delete"
+
+[manage.repositories.delete_repository]
+    ask.en = "Delete"
+    ask.fr = "Supprimer"
+    type = "button"
+    icon = "trash"
+    style = "danger"
+    enabled = "repository_to_delete && delete_aknowledgement"
+
+[configure]
+    name.en = "Configure repositories"
+    name.fr = "Configurer les dépôts"

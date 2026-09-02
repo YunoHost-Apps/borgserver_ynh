@@ -5,27 +5,26 @@ source /usr/share/yunohost/helpers
 #=================================================
 # DECLARE DATA AND CONF FILES TO BACKUP
 #=================================================
-ynh_print_info --message="Declaring files to be backed up..."
+ynh_print_info "Declaring files to be backed up..."
 
 #=================================================
 # BACKUP THE APP MAIN DIR
 #=================================================
 
-ynh_backup --src_path="$install_dir"
+ynh_backup "$install_dir"
 
 #=================================================
 # BACKUP THE DATA DIR
 #=================================================
 
-ynh_backup --src_path="/home/$ssh_user/.ssh"
-ynh_backup --src_path="/home/$ssh_user/.nobackup"
+ynh_print_info "Borg backup repo in $data_dir won't be backup to avoid backup of backup loop issue."
 
-ynh_print_info --message="Borg backup repo in /home/$ssh_user/ won't be backup to avoid backup of backup loop issue."
-
-ynh_backup --src_path="/etc/cron.d/$app"
+ynh_backup "$data_dir/.ssh"
+ynh_backup "/etc/ssh/ssh_config.d/$app.conf"
+ynh_backup "/etc/cron.d/$app"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_print_info --message="Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."
+ynh_print_info "Backup script completed for $app. (YunoHost will then actually copy those files to the archive)."

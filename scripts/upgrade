@@ -6,75 +6,87 @@ source /usr/share/yunohost/helpers
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
+ynh_script_progression "Ensuring downward compatibility..."
 
 # Remove legacy stuff
 if [ -f "/etc/apt/sources.list.d/$app-stretch-backports.list" ]; then
-    ynh_secure_remove "/etc/apt/sources.list.d/$app-stretch-backports.list"
+    ynh_safe_rm "/etc/apt/sources.list.d/$app-stretch-backports.list"
 fi
 
 if [ -f "/etc/yunohost/hooks.d/backup/17-data_home" ]; then
-    ynh_secure_remove "/etc/yunohost/hooks.d/backup/17-data_home"
+    ynh_safe_rm "/etc/yunohost/hooks.d/backup/17-data_home"
 fi
 
 # Clear legacy stuff
 if [ -d /opt/borg-env ]; then
-    ynh_secure_remove --file="/opt/borg-env"
-    ynh_secure_remove --file="/usr/local/bin/borg"
-    ynh_secure_remove --file="/usr/local/bin/backup-with-borg"
+    ynh_safe_rm --file="/opt/borg-env"
+    ynh_safe_rm --file="/usr/local/bin/borg"
+    ynh_safe_rm --file="/usr/local/bin/backup-with-borg"
 fi
 
-# Fix broken value ssh_user that mistakenly got replaced by the public key in previous versions...
-[ -n "${ssh_user:-}" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
-if echo "$ssh_user" | grep -q ' '; then
-    ssh_user=$(grep "$ssh_user" /home/*/.ssh/authorized_keys | grep borg | cut -d/ -f3)
-    [ -n "$ssh_user" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
-    ynh_app_setting_set --app="$app" --key=ssh_user --value="$ssh_user"
-fi
+if ynh_app_upgrading_from_version_before_or_equal_to "1.4.0~ynh1"; then
+    ynh_script_progression "Retrieving old configuration..."
+    # Get previous settings values
+    [ -n "${ssh_user:-}" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
+    if echo "$ssh_user" | grep -q ' '; then
+        ssh_user=$(grep "$ssh_user" /home/*/.ssh/authorized_keys | grep borg | cut -d/ -f3)
+        [ -n "$ssh_user" ] || ynh_die "Unable to retrieve ssh_user please fix /etc/yunohost/apps/$app/settings.yml manually :( !"
+    fi
+    if echo "$public_key" | grep -q -v ' '; then
+        default_public_key="$(grep -Po 'no-user-rc \K.*$' "/home/$ssh_user/.ssh/authorized_keys")"
+    fi
+    if [ -z "$quota" ]; then
+        quota=""
+    fi
+    if [ -z "$alert_delay" ]; then
+        alert_delay=""
+    fi
+    if [ -z "$alert_mails" ]; then
+        alert_mails="root"
+    fi
 
-if echo "$public_key" | grep -q -v ' '; then
-    ynh_app_setting_set --app="$app" --key=public_key --value="$(grep -Po 'no-user-rc \K.*$' "/home/$ssh_user/.ssh/authorized_keys")"
-fi
+    ynh_script_progression "Creating new configuration..."
+    # Create new configuration
+    cp -a "/home/$ssh_user/*" "$data_dir/" # Necessary as data directory wasn't configured with data_dir variable
+    chown -R "$app:$app" "$data_dir"
+    chmod -R u=rwX,go=--- "$data_dir"
+    # See https://borgbackup.readthedocs.io/en/stable/usage/serve.html#ssh-configuration
+    chsh -s /bin/dash "$app"
+    repository_to_add="$ssh_user"
+    create_repository
+    configure_repository "$repository_to_add" "$default_public_key" "$quota"
+    ynh_app_setting_set --key="${repository_to_add}_public_key" --value="$default_public_key"
+    ynh_app_setting_set --key="${repository_to_add}_quota" --value="$quota"
+    ynh_app_setting_set --key="${repository_to_add}_alert_delay" --value="$alert_delay"
+    ynh_app_setting_set --key="${repository_to_add}_alert_mails" --value="$alert_mails"
 
-# Alert delay and alert mail missing
-if [ -z "${alert_delay:-}" ]; then
-    ynh_app_setting_set --app="$app" --key=alert_delay --value="1"
-    ynh_app_setting_set --app="$app" --key=alert_mails --value="root"
+    ynh_script_progression "Removing old configuration..."
+    # Remove old configuration
+    ynh_system_user_delete --username="$ssh_user" # Necessary as user was manually created
+    ynh_safe_rm "/home/$ssh_user"
+    ynh_app_setting_delete --key="ssh_user"
+    ynh_app_setting_delete --key="public_key"
+    ynh_app_setting_delete --key="alert_delay"
+    ynh_app_setting_delete --key="alert_mails"
 fi
 
 #=================================================
 # UPGRADE BORG
 #=================================================
-ynh_script_progression --message="Upgrading Borg..." --weight=1
+ynh_script_progression "Upgrading Borg..."
 
 install_borg_with_pip
 
-#=================================================
-# AUTORIZE SSH FOR THIS USER
-#=================================================
-ynh_script_progression --message="Making sure SSH user exists with appropriate permissions..."
-
-ynh_system_user_create --username="$ssh_user" --home_dir="/home/$ssh_user" --use_shell --groups ssh.app
-mkdir -p "/home/$ssh_user"
-chmod 700 "/home/$ssh_user"
-chown "$ssh_user" "/home/$ssh_user"
-
-# Tweak to prevent the backup of the backup itself
-touch "/home/$ssh_user/.nobackup"
-
-create_ssh_config "/home/$ssh_user/.ssh" "/home/$ssh_user/backup"
-
-#=================================================
-# SETUP CRON
-#=================================================
-ynh_script_progression --message="Configuring cron to monitor backup..."
-
-ynh_add_config --template="monitor-backup.cron" --destination="/etc/cron.d/$app"
-ynh_add_config --template="monitor-backup.sh" --destination="$install_dir/monitor-backup.sh"
+ynh_config_add --template="monitor-backup.cron" --destination="/etc/cron.d/$app"
+ynh_config_add --template="helpers.sh" --destination="$install_dir/helpers.sh"
+ynh_config_add --template="monitor-backup.sh" --destination="$install_dir/monitor-backup.sh"
+# See https://borgbackup.readthedocs.io/en/stable/usage/serve.html#ssh-configuration
+ynh_config_add --template="sshd_config" --destination="/etc/ssh/ssh_config.d/$app.conf"
+chmod +x "$install_dir/helpers.sh"
 chmod +x "$install_dir/monitor-backup.sh"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --last
+ynh_script_progression "Upgrade of $app completed"
